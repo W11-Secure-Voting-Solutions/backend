@@ -41,6 +41,40 @@
         // utils
         BOOTH = {};
 
+        $(document).ready(function () {
+          if (USE_SJCL) {
+            sjcl.random.startCollectors();
+          }
+
+          // we're asynchronous if we have SJCL and Worker
+          BOOTH.synchronous = !(USE_SJCL && window.Worker);
+
+          // we do in the browser only if it's asynchronous
+          BigInt.in_browser = !BOOTH.synchronous;
+
+          // set up dummy bigint for fast parsing and serialization
+          if (!BigInt.in_browser)
+            BigInt = BigIntDummy;
+
+          //BigInt.setup(BOOTH.so_lets_go, BOOTH.nojava);
+          BigInt.setup(BOOTH.load_welcome_page, BOOTH.nojava);
+        });
+
+        BOOTH.load_welcome_page = function() {
+          BOOTH.hide_progress();
+          BOOTH.setup_templates();
+
+          BOOTH.show($('#welcome_div')).processTemplate({ 'election': BOOTH.election });
+        }
+        BOOTH.start_election = function() {
+          var title = document.getElementById('title').value;
+          console.log('SID: '+title);
+
+          // election URL
+          var election_url = $.query.get('election_url');
+          BOOTH.load_and_setup_election(election_url, title);
+        }
+
         BOOTH.setup_templates = function () {
           if (BOOTH.templates_setup_p)
             return;
@@ -48,6 +82,7 @@
           var cache_bust = "?cb=" + new Date().getTime();
 
           $('#header').setTemplateURL("templates/header.html" + cache_bust);
+          $('#welcome_div').setTemplateURL("templates/welcome.html" + cache_bust);
           $('#election_div').setTemplateURL("templates/election.html" + cache_bust);
           $('#question_div').setTemplateURL("templates/question.html" + cache_bust);
           $('#seal_div').setTemplateURL("templates/seal.html" + cache_bust);
@@ -310,8 +345,6 @@
           BOOTH.dirty[question_num] = old_dirty;
         };
 
-
-
         BOOTH.click_checkbox_script = function (question_num, answer_num) {
           document.forms['answer_form']['answer_' + question_num + '_' + answer_num].click();
         };
@@ -366,9 +399,9 @@
           func_to_execute();
         };
 
-        BOOTH.load_and_setup_election = function (election_url) {
+        BOOTH.load_and_setup_election = function (election_url, sessiontitle) {
           // the hash will be computed within the setup function call now
-          $.get(election_url, function (raw_json) {
+          $.get(election_url, {session_title: sessiontitle}, function (raw_json) {
             // let's also get the metadata
             $.getJSON(election_url + "meta", {}, function (election_metadata) {
               BOOTH.election_metadata = election_metadata;
@@ -401,16 +434,6 @@
           });
         };
 
-        BOOTH.so_lets_go = function () {
-          BOOTH.hide_progress();
-
-          BOOTH.setup_templates();
-
-          // election URL
-          var election_url = $.query.get('election_url');
-          BOOTH.load_and_setup_election(election_url);
-        };
-
         BOOTH.nojava = function () {
           // in the case of Chrome, we get here when Java
           // is disabled, instead of detecting the problem earlier.
@@ -423,25 +446,6 @@
         };
 
         BOOTH.ready_p = false;
-
-        $(document).ready(function () {
-          if (USE_SJCL) {
-            sjcl.random.startCollectors();
-          }
-
-          // we're asynchronous if we have SJCL and Worker
-          BOOTH.synchronous = !(USE_SJCL && window.Worker);
-
-          // we do in the browser only if it's asynchronous
-          BigInt.in_browser = !BOOTH.synchronous;
-
-          // set up dummy bigint for fast parsing and serialization
-          if (!BigInt.in_browser)
-            BigInt = BigIntDummy;
-
-          BigInt.setup(BOOTH.so_lets_go, BOOTH.nojava);
-        });
-
 
         BOOTH.check_encryption_status = function () {
           var progress = BOOTH.progress.progress();
@@ -606,6 +610,8 @@
             </tr>
           </table>
         </div>
+
+        <div id="welcome_div" class="panel"></div>
         <div id="election_div" class="panel">
           <h3>Checking capabilities and loading election booth...</h3>
           <div align="center"><img src="loading.gif" /><br />This may take up to 10 seconds</div>
