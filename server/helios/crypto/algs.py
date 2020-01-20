@@ -857,7 +857,7 @@ def EG_disjunctive_challenge_generator(commitments):
         array_to_hash.append(str(commitment["B"]))
 
     string_to_hash = ",".join(array_to_hash)
-    return int(hashlib.sha1(string_to_hash).hexdigest(), 16)
+    return int(hashlib.sha1(string_to_hash.encode()).hexdigest(), 16)
 
 
 # a challenge generator for Fiat-Shamir with A,B commitment
