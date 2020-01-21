@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.staticfiles",
+    "rest_framework",
     "debug_toolbar",
     "corsheaders",
     "allauth",
@@ -141,6 +142,14 @@ INSTALLED_APPS = (
     "server_ui.apps.ServerUiConfig",
     "apolloassistant",
 )
+
+# REST_FRAMEWORK = {
+#     # Use Django's standard `django.contrib.auth` permissions,
+#     # or allow read-only access for unauthenticated users.
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+#     ]
+# }
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {

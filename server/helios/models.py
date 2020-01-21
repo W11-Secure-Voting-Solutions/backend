@@ -1298,3 +1298,10 @@ class Trustee(HeliosModel):
             self.public_key,
             algs.EG_fiatshamir_challenge_generator,
         )
+
+
+class FakeBooth(models.Model):
+    id = models.CharField(max_length=100, unique=True, primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    body = JSONField()

@@ -8,7 +8,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('helios', '0004_auto_20200121_1217'),
+        ('helios', '0004_alter_voter'),
     ]
 
     operations = [

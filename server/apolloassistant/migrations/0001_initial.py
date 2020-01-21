@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('helios', '0005_auto_20200121_1245'),
+        ('helios', '0005_remove_qrcode'),
         ('helios_auth', '0001_initial'),
     ]
 

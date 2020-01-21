@@ -2,8 +2,9 @@
 from django.conf.urls import url, include
 
 import helios.views
-from . import url_names as names
-from helios import views
+from . import url_names as names, viewsets, views
+from rest_framework.routers import DefaultRouter
+
 
 urlpatterns = [
     url(r"^autologin$", views.admin_autologin),
@@ -53,3 +54,8 @@ urlpatterns = [
     url(r"^elections/voted$", views.elections_voted, name=names.ELECTIONS_VOTED),
     url(r"^elections/(?P<election_uuid>[^/]+)/", include("helios.election_urls")),
 ]
+
+router = DefaultRouter()
+router.register(r'fake-booth', viewsets.FakeBoothViewSet)
+
+urlpatterns += [url(r'^', include(router.urls))]

@@ -35,6 +35,9 @@ webtest = "==2.0.18"
 django-redis = "~=4.10.0"
 redis = "~=3.3.11"
 qrcode = "==6.1"
+djangorestframework = "^3.11.0"
+markdown = "^3.1.1"
+django-filter = "^2.2.0"
 
 [tool.poetry.dev-dependencies]
 django-extensions= "^=1.9.9"
