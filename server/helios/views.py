@@ -19,6 +19,7 @@ import uuid
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 from django.db import transaction, IntegrityError
 from django.http import (
     HttpResponse,
@@ -1954,10 +1955,16 @@ def one_election(request, election):
     if not session_title or len(session_title) > 50:
         raise Http404
 
+    session_id = session_title + get_random_string(length=128)
     request_voter.session_title = session_title
+    request_voter.session_id = session_id
     request_voter.save()
 
-    return {**election.toJSONDict(complete=True), 'session_title': session_title}
+    return {
+        **election.toJSONDict(complete=True), 
+        'session_title': session_title, 
+        'qr_code': utils.create_qr_code_in_base64(session_id)
+    }
 
 
 def test_cookie(request):
