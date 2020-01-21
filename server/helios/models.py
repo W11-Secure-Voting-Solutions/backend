@@ -873,6 +873,8 @@ class Voter(HeliosModel):
     election = models.ForeignKey(Election, on_delete=models.CASCADE)
 
     session_title = models.TextField(max_length=50, default='')
+    session_id = models.TextField(default='')
+    qr_code = models.TextField(default='')
 
     # let's link directly to the user now
     # FIXME: delete this as soon as migrations are set up
@@ -926,14 +928,14 @@ class Voter(HeliosModel):
             voter.alias = "V%s" % alias_num
 
         voter.save()
-        # TODO: fix with proper data
-        qr_code_content = "content"
-        qr_code_base64 = heliosutils.create_qr_code_in_base64(qr_code_content)
+        # # TODO: fix with proper data
+        # qr_code_content = "content"
+        # qr_code_base64 = heliosutils.create_qr_code_in_base64(qr_code_content)
 
-        QrCode.objects.create(
-            voter=voter,
-            image_base64=qr_code_base64
-        )
+        # QrCode.objects.create(
+        #     voter=voter,
+        #     image_base64=qr_code_base64
+        # )
         return voter
 
     @classmethod
@@ -1310,3 +1312,7 @@ class QrCode(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     image_base64 = models.TextField()
     
+    @classmethod
+    def get_for_voter(cls, voter):
+        
+        return cls.objects.get_or_create(voter=voter, defaults={})
