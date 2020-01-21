@@ -3,13 +3,13 @@ window.onload = () => console.log('done');
 ASSISTANT = {}
 
 ASSISTANT.random = function (length) {
-  return btoa(sjcl.random.randomWords(length));
+  return btoa(sjcl.random.randomWords(length)).slice(0, length);
 }
 
 ASSISTANT.generateSessionData = function (sessionTitle) {
   localStorage['sessionTitle'] = sessionTitle;
   localStorage['sessionId'] = sessionTitle + ASSISTANT.random(16);
-  localStorage['keyRandom'] = ASSISTANT.random(128);
+  localStorage['keyRandom'] = ASSISTANT.random(32);
 }
 
 ASSISTANT.handleStart = function () {
@@ -37,4 +37,6 @@ ASSISTANT.renderQrCode = function () {
   });
 
   $('#qrcode').qrcode({ width: 256, height: 256, text: qrCodeData });
+  $('#session-title').text('sessionTitle: ' + localStorage['sessionTitle']);
+  $('#session-id').text('sessionId: ' + localStorage['sessionId']);
 }
