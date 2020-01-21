@@ -9,7 +9,7 @@ APPS_DIR = environ.Path(__file__) - 3
 
 env = environ.Env()
 
-DEBUG = True
+DEBUG = False
 
 # add admins of the form:
 #    ('Ben Adida', 'ben@adida.net'),
@@ -32,11 +32,11 @@ SHOW_USER_INFO = True
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env("POSTGRES_DB", default=""),
-        "HOST": env("POSTGRES_HOST", default=""),
-        "PORT": env("POSTGRES_PORT", default=""),
-        "USER": env("POSTGRES_USER", default=""),
-        "PASSWORD": env("POSTGRES_PASSWORD", default=""),
+        "NAME": env("POSTGRES_DB"),
+        "HOST": env("POSTGRES_HOST"),
+        "PORT": env("POSTGRES_PORT"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
     }
 }
 
@@ -71,7 +71,7 @@ MEDIA_URL = ""
 
 # *********************** STATIC ***********************
 
-STATIC_URL = "/static/"
+STATIC_URL = "./static/"
 STATICFILES_DIRS = [str(APPS_DIR("static"))]
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -135,29 +135,22 @@ INSTALLED_APPS = (
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
-    "django_extensions",
     "helios_auth.apps.HeliosAuthConfig",
     "helios.apps.HeliosConfig",
     "server_ui.apps.ServerUiConfig",
-    "apolloassistant",
 )
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APP": {
-            "client_id": env("GOOGLE_CLIENT_ID", default=""),
-            "secret": env("GOOGLE_CLIENT_SECRET", default=""),
+            "client_id": env("GOOGLE_CLIENT_ID"),
+            "secret": env("GOOGLE_CLIENT_SECRET"),
             "key": "",
         }
     },
     "github": {"SCOPE": ["user",]},
 }
 
-INTERNAL_IPS = ["127.0.0.1"]
-
-# tricks to have debug toolbar when developing with docker
-ip = socket.gethostbyname(socket.gethostname())
-INTERNAL_IPS += [ip[:-1] + "1"]
 
 ##
 ## HELIOS
@@ -231,13 +224,13 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS", default="0") == "1"
 if env("EMAIL_USE_AWS", default="0") == "1":
     EMAIL_BACKEND = "django_ses.SESBackend"
 
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
+logging.basicConfig(level=logging.ERROR, format="%(asctime)s %(levelname)s %(message)s")
 
-GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default="")
-GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default="")
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET")
 
 
-CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="django://")
+CELERY_BROKER_URL = env("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
@@ -250,6 +243,6 @@ CELERY_TASKS_ALWAYS_EAGER = True
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_PRELOAD = True
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
 
 LOGIN_REDIRECT_URL = '/'
