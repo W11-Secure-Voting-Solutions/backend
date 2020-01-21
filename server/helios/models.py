@@ -928,14 +928,6 @@ class Voter(HeliosModel):
             voter.alias = "V%s" % alias_num
 
         voter.save()
-        # # TODO: fix with proper data
-        # qr_code_content = "content"
-        # qr_code_base64 = heliosutils.create_qr_code_in_base64(qr_code_content)
-
-        # QrCode.objects.create(
-        #     voter=voter,
-        #     image_base64=qr_code_base64
-        # )
         return voter
 
     @classmethod
@@ -1306,13 +1298,3 @@ class Trustee(HeliosModel):
             self.public_key,
             algs.EG_fiatshamir_challenge_generator,
         )
-
-class QrCode(models.Model):
-    voter = models.OneToOneField(Voter, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    image_base64 = models.TextField()
-    
-    @classmethod
-    def get_for_voter(cls, voter):
-        
-        return cls.objects.get_or_create(voter=voter, defaults={})
