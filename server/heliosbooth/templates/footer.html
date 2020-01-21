@@ -5,5 +5,8 @@
 The public key for this election is not yet ready. This election is in preview mode only.
 {#else}
 Election Fingerprint: <span id="election_hash" style="font-weight:bold;">{$T.election.hash}</span>
+<br>
 {#/if}
-
+{#if $T.election.qr_code}
+QR Code: <img height="32" width="32" alt="qr_code" src="data:image/png;base64,{$T.election.hash}">
+{#/if}
