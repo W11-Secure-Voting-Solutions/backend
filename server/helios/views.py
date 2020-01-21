@@ -1938,9 +1938,26 @@ def one_election_view(request, election):
 @election_view()
 @return_json
 def one_election(request, election):
+
     if not election:
         raise Http404
-    return election.toJSONDict(complete=True)
+
+    user = get_user(request)
+    request_voter = Voter.objects.filter(user=user, election=election).first()
+
+    if not request_voter:
+        raise Http404
+
+    payload = getattr(request, request.method, {})
+    session_title = payload.get("session_title")
+
+    if not session_title or len(session_title) > 50:
+        raise Http404
+
+    request_voter.session_title = session_title
+    request_voter.save()
+
+    return {**election.toJSONDict(complete=True), 'session_title': session_title}
 
 
 def test_cookie(request):
