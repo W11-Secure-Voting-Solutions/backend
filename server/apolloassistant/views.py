@@ -36,4 +36,8 @@ def get_bulletin_board(request):
   if not voter:
     return fail_response("session_id '%s' is invalid" % session_id)
 
-  return success_response("Success. To be implemented: return bulletin board.")
+  return success_response("session_id found, BB not yet implemented", {
+    'bulletin_board': {},
+    'session_id': voter.session_id,
+    'session_title': voter.session_title,
+  })
