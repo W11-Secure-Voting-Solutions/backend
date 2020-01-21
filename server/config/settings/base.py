@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     "helios_auth.apps.HeliosAuthConfig",
     "helios.apps.HeliosConfig",
     "server_ui.apps.ServerUiConfig",
+    "apolloassistant",
 )
 
 SOCIALACCOUNT_PROVIDERS = {
