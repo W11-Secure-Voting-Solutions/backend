@@ -48,6 +48,10 @@ from helios_auth.security import (
     get_user,
     save_in_session_across_logouts,
 )
+from apolloassistant.models import (
+    AssistantSession
+)
+
 from . import datatypes
 from . import forms
 from taskapp import tasks
@@ -1941,24 +1945,29 @@ def one_election_view(request, election):
 def one_election(request, election):
 
     if not election:
-        raise Http404
+        raise Http404("Election not found.")
 
     user = get_user(request)
-    request_voter = Voter.objects.filter(user=user, election=election).first()
 
-    if not request_voter:
-        raise Http404
+    if not user:
+        raise Http404("User does not exist.")
 
     payload = getattr(request, request.method, {})
     session_title = payload.get("session_title")
 
     if not session_title or len(session_title) > 50:
-        raise Http404
+        raise Http404("Invalid session title.")
 
-    session_id = session_title + get_random_string(length=32)
-    request_voter.session_title = session_title
-    request_voter.session_id = session_id
-    request_voter.save()
+    session_id = session_title + get_random_string(32)
+
+    AssistantSession.objects.update_or_create(
+        user=user,
+        election=election,
+        defaults={
+            'session_title': session_title,
+            'session_id': session_id,
+        }
+    )
 
     return {
         **election.toJSONDict(complete=True), 

@@ -3,10 +3,8 @@ from django.utils.crypto import get_random_string
 from django.contrib.postgres import fields
 
 
-class BulletinBoard:
-  election = models.ForeignKey('helios.Election', on_delete=models.CASCADE)
-  content = fields.JSONField(default={})
-
-  @classmethod
-  def create_for_election(cls, election):
-    return cls(election=election, content={})
+class AssistantSession(models.Model):
+    user = models.ForeignKey('helios_auth.User', on_delete=models.CASCADE)
+    election = models.ForeignKey('helios.Election', on_delete=models.CASCADE)
+    session_title = models.TextField(max_length=50, default='')
+    session_id = models.TextField(default='')
