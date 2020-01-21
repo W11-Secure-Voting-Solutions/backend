@@ -872,6 +872,8 @@ class VoterFile(models.Model):
 class Voter(HeliosModel):
     election = models.ForeignKey(Election, on_delete=models.CASCADE)
 
+    session_title = models.TextField(max_length=50, default='')
+
     # let's link directly to the user now
     # FIXME: delete this as soon as migrations are set up
     # name = models.CharField(max_length = 200, null=True)
