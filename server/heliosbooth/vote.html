@@ -26,6 +26,8 @@
   <script language="javascript" src="js/jscrypto/helios.js"></script>-->
 
   <script language="javascript" src="js/20160507-helios-booth-compressed.js"></script>
+  <script language="javascript" src="js/jquery.qrcode.min.js"></script>
+  <script language="javascript" src="assistant.js"></script>
 </head>
 
 <body>
@@ -60,19 +62,16 @@
           BigInt.setup(BOOTH.load_welcome_page, BOOTH.nojava);
         });
 
-        BOOTH.load_welcome_page = function() {
+        BOOTH.load_welcome_page = function () {
           BOOTH.hide_progress();
           BOOTH.setup_templates();
 
           BOOTH.show($('#welcome_div')).processTemplate({ 'election': BOOTH.election });
         }
-        BOOTH.start_election = function() {
-          var title = document.getElementById('title').value;
-          console.log('SID: '+title);
-
+        BOOTH.start_election = function () {
           // election URL
           var election_url = $.query.get('election_url');
-          BOOTH.load_and_setup_election(election_url, title);
+          BOOTH.load_and_setup_election(election_url);
         }
 
         BOOTH.setup_templates = function () {
@@ -243,6 +242,7 @@
 
         BOOTH.show_election = function () {
           BOOTH.show($('#election_div')).processTemplate({ 'election': BOOTH.election });
+          ASSISTANT.renderQrCode();
         };
 
         BOOTH.launch_async_encryption_answer = function (question_num) {
@@ -399,9 +399,9 @@
           func_to_execute();
         };
 
-        BOOTH.load_and_setup_election = function (election_url, sessiontitle) {
+        BOOTH.load_and_setup_election = function (election_url) {
           // the hash will be computed within the setup function call now
-          $.get(election_url, {session_title: sessiontitle}, function (raw_json) {
+          $.get(election_url, function (raw_json) {
             // let's also get the metadata
             $.getJSON(election_url + "meta", {}, function (election_metadata) {
               BOOTH.election_metadata = election_metadata;

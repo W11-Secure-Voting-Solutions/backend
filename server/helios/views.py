@@ -1947,40 +1947,7 @@ def one_election(request, election):
     if not election:
         raise Http404("Election not found.")
 
-    user = get_user(request)
-
-    if not user:
-        raise Http404("User does not exist.")
-
-    payload = getattr(request, request.method, {})
-    session_title = payload.get("session_title")
-
-    if not session_title or len(session_title) > 50:
-        raise Http404("Invalid session title.")
-
-    session_id = session_title + get_random_string(32)
-
-    assistant_session, _ = AssistantSession.objects.update_or_create(
-        user=user,
-        election=election,
-        defaults={
-            'session_title': session_title,
-            'session_id': session_id,
-            'secret_key': get_random_string(32),
-        }
-    )
-
-    qr_code_data = json.dumps({
-        'k_rand': assistant_session.secret_key, 
-        'session_id': assistant_session.session_id,
-    })
-
-    return {
-        **election.toJSONDict(complete=True), 
-        'session_title': session_title, 
-        'qr_code': utils.create_qr_code_in_base64(qr_code_data),
-        'session_id': session_id,
-    }
+    return election.toJSONDict(complete=True)
 
 
 def test_cookie(request):
