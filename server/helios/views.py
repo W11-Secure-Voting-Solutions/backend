@@ -1955,7 +1955,7 @@ def one_election(request, election):
     if not session_title or len(session_title) > 50:
         raise Http404
 
-    session_id = session_title + get_random_string(length=128)
+    session_id = session_title + get_random_string(length=32)
     request_voter.session_title = session_title
     request_voter.session_id = session_id
     request_voter.save()
@@ -1963,7 +1963,8 @@ def one_election(request, election):
     return {
         **election.toJSONDict(complete=True), 
         'session_title': session_title, 
-        'qr_code': utils.create_qr_code_in_base64(session_id)
+        'qr_code': utils.create_qr_code_in_base64(session_id),
+        'session_id': session_id,
     }
 
 
