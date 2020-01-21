@@ -1960,19 +1960,25 @@ def one_election(request, election):
 
     session_id = session_title + get_random_string(32)
 
-    AssistantSession.objects.update_or_create(
+    assistant_session, _ = AssistantSession.objects.update_or_create(
         user=user,
         election=election,
         defaults={
             'session_title': session_title,
             'session_id': session_id,
+            'secret_key': get_random_string(32),
         }
     )
+
+    qr_code_data = json.dumps({
+        'k_rand': assistant_session.secret_key, 
+        'session_id': assistant_session.session_id,
+    })
 
     return {
         **election.toJSONDict(complete=True), 
         'session_title': session_title, 
-        'qr_code': utils.create_qr_code_in_base64(session_id),
+        'qr_code': utils.create_qr_code_in_base64(qr_code_data),
         'session_id': session_id,
     }
 

@@ -8,3 +8,4 @@ class AssistantSession(models.Model):
     election = models.ForeignKey('helios.Election', on_delete=models.CASCADE)
     session_title = models.TextField(max_length=50, default='')
     session_id = models.TextField(default='')
+    secret_key = models.TextField(default='')
