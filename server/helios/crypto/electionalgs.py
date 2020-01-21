@@ -356,7 +356,7 @@ class EncryptedVote(HeliosObject):
             return False
 
         # check hash
-        if self.election_hash != election.hash:
+        if self.election_hash.encode() != election.hash:
             # print "%s / %s " % (self.election_hash, election.hash)
             return False
 

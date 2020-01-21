@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
+    "django_extensions",
     "helios_auth.apps.HeliosAuthConfig",
     "helios.apps.HeliosConfig",
     "server_ui.apps.ServerUiConfig",

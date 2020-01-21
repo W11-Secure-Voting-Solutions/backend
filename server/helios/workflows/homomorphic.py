@@ -217,7 +217,7 @@ class EncryptedVote(WorkflowObject):
             return False
 
         # check hash
-        if self.election_hash != election.hash:
+        if self.election_hash != election.hash.decode():
             # print "%s / %s " % (self.election_hash, election.hash)
             return False
 

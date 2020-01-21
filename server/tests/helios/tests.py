@@ -588,7 +588,7 @@ class ElectionBlackboxTests(WebTest):
         # check that helios is indeed a trustee
         response = self.client.get(
             "/helios/elections/%s/trustees/view" % election_id)
-        self.assertContains(response, "Trustee #1")
+        assert "Trustee #1" in response.content.decode()
 
         # add a few voters with an improperly placed email address
         FILE = "helios/fixtures/voter-badfile.csv"
@@ -598,7 +598,7 @@ class ElectionBlackboxTests(WebTest):
             {"voters_file": voters_file},
         )
         voters_file.close()
-        self.assertContains(response, "HOLD ON")
+        assert "HOLD ON" in response.content.decode()
 
         # add a few voters, via file upload
         # this file now includes a UTF-8 encoded unicode character
@@ -611,7 +611,7 @@ class ElectionBlackboxTests(WebTest):
             {"voters_file": voters_file},
         )
         voters_file.close()
-        self.assertContains(response, "first few rows of this file")
+        assert "first few rows of this file" in response.content.decode()
 
         # now we confirm the upload
         response = self.client.post(
@@ -633,7 +633,7 @@ class ElectionBlackboxTests(WebTest):
         response = self.client.get(
             "/helios/elections/%s/voters/%s" % (election_id, single_voter.uuid)
         )
-        self.assertContains(response, '"uuid": "%s"' % single_voter.uuid)
+        assert '"uuid": "%s"' % single_voter.uuid in response.content.decode()
 
         response = self.client.get(
             "/helios/elections/%s/voters/foobar" % election_id)
@@ -662,7 +662,7 @@ class ElectionBlackboxTests(WebTest):
             },
         )
 
-        self.assertContains(response, "SUCCESS")
+        assert "SUCCESS" in response.content.decode()
 
         # freeze election
         response = self.client.post(
@@ -719,7 +719,7 @@ class ElectionBlackboxTests(WebTest):
             "/helios/elections/%s/encrypt-ballot" % election_id,
             params={"answers_json": utils.to_json([[1]])},
         )
-        self.assertContains(response, "answers")
+        assert "answers" in response.content.decode()
 
         # parse it as an encrypted vote with randomness, and make sure randomness is there
         the_ballot = utils.from_json(response.testbody)
@@ -803,8 +803,8 @@ class ElectionBlackboxTests(WebTest):
                 login_form.submit()
 
         response = self.app.get(url, auto_follow=True)
-        self.assertContains(response, ballot.hash)
-        self.assertContains(response, html_escape(encrypted_vote))
+        assert ballot.hash in response.content.decode()
+        assert html_escape(encrypted_vote) in response.content.decode()
 
         # if we request the redirect to cast_done, the voter should be logged out, but not the user
         response = self.app.get("/helios/elections/%s/cast_done" % election_id)
@@ -920,7 +920,7 @@ class ElectionBlackboxTests(WebTest):
     #
     #     self.clear_login()
     #     response = self.client.get("/helios/elections/%s/voters/list" % election_id)
-    #     self.assertContains(response, "Anyone can vote")
+    #     assert "Anyone can vote" in response.content.decode()
     #
     #     self.setup_login()
     #     response = self.client.post("/helios/elections/%s/voters/eligibility" % election_id, {
@@ -929,7 +929,7 @@ class ElectionBlackboxTests(WebTest):
     #
     #     self.clear_login()
     #     response = self.client.get("/helios/elections/%s/voters/list" % election_id)
-    #     self.assertContains(response, "Only the voters listed here")
+    #     assert "Only the voters listed here" in response.content.decode()
     #
     # def test_do_complete_election_with_trustees(self):
     #     """

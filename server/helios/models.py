@@ -18,6 +18,7 @@ import csv
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models, transaction
+from django.utils.timezone import now
 
 from helios import datatypes
 from helios import utils as heliosutils
@@ -374,8 +375,8 @@ class Election(HeliosModel):
         """
     has voting begun? voting begins if the election is frozen, at the prescribed date or at the date that voting was forced to start
     """
-        return self.frozen_at != None and (
-            self.voting_starts_at == None
+        return self.frozen_at is not None and (
+            self.voting_starts_at is None
             or (
                 datetime.datetime.utcnow()
                 >= (self.voting_started_at or self.voting_starts_at)
@@ -391,7 +392,7 @@ class Election(HeliosModel):
             self.voting_ended_at or self.voting_extended_until or self.voting_ends_at
         )
         return (
-            voting_end != None and datetime.datetime.utcnow() >= voting_end
+            voting_end is not None and now() >= voting_end
         ) or self.encrypted_tally
 
     @property
@@ -1164,7 +1165,6 @@ class CastVote(HeliosModel):
             )
 
         result = self.vote.verify(self.voter.election)
-
         if result:
             self.verified_at = datetime.datetime.utcnow()
         else:
