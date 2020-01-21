@@ -1,0 +1,10 @@
+steps:
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: docker-build
+  args: ['build', '-t', 'gcr.io/$_PROJECT/${_APP_NAME}:$BRANCH_NAME-$SHORT_SHA', '.', '-f', 'docker/prod/server/Dockerfile']
+
+images: ['gcr.io/$PROJECT_ID/${_APP_NAME}:$BRANCH_NAME-$SHORT_SHA']
+
+substitutions:
+  _APP_NAME: backend
