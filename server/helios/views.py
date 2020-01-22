@@ -48,9 +48,6 @@ from helios_auth.security import (
     get_user,
     save_in_session_across_logouts,
 )
-from apolloassistant.models import (
-    AssistantSession
-)
 
 from . import datatypes
 from . import forms
