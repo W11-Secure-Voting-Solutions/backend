@@ -34,11 +34,11 @@ urlpatterns = [
         {"document_root": str(settings.APPS_DIR.path("/server_ui/media"))},
     ),
     url(r"^", include("server_ui.urls")),
-    url(r"^assistant/", include("apolloassistant.urls")),
-
 ]
 
 if settings.DEBUG:
     import debug_toolbar
 
-    urlpatterns = [url(r"^__debug__/", include(debug_toolbar.urls)),] + urlpatterns
+    urlpatterns = [
+        url(r"^__debug__/", include(debug_toolbar.urls)),
+    ] + urlpatterns
