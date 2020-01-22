@@ -40,3 +40,25 @@ ASSISTANT.renderQrCode = function () {
   $('#session-title').text('sessionTitle: ' + localStorage['sessionTitle']);
   $('#session-id').text('sessionId: ' + localStorage['sessionId']);
 }
+
+ASSISTANT.audit_ballot = function () {
+  const encryptedRandomness = localStorage["encryptedRandomness"];
+  const body = {
+    "body": encryptedRandomness
+  };
+  ASSISTANT.postOnBB(body);
+  BOOTH.audit_ballot();
+};
+
+ASSISTANT.postOnBB = function(data) {
+  const sessionId = localStorage["sessionId"];
+  const url = `/helios/fake-booth/${sessionId}/`;
+  $.ajax({
+    url: url,
+    type: 'PUT',
+    data: data,
+    success: function(response) {
+      console.log('SUCCESSFULLY POSTED ON BB');
+    }
+  });
+};
