@@ -50,15 +50,28 @@ ASSISTANT.audit_ballot = function () {
   BOOTH.audit_ballot();
 };
 
-ASSISTANT.postOnBB = function(data) {
+ASSISTANT.postOnBB = function (data) {
   const sessionId = localStorage["sessionId"];
   const url = `/helios/fake-booth/${sessionId}/`;
   $.ajax({
     url: url,
     type: 'PUT',
     data: data,
-    success: function(response) {
+    success: function (response) {
       console.log('SUCCESSFULLY POSTED ON BB');
     }
   });
 };
+
+ASSISTANT.cast_ballot = function () {
+  const castCode = $('#cast_code').val()
+
+  if (!castCode || castCode.length === 0) {
+    alert("Please provide cast code");
+    return;
+  }
+
+  $('#hidden_cast_code').val(castCode);
+
+  BOOTH.cast_ballot();
+}

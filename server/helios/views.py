@@ -76,6 +76,10 @@ from .workflows import homomorphic
 
 import helios_auth.url_names as helios_auth_urls
 
+from apolloassistant.models import CastCode
+from apolloassistant.registrar import generate_codes_for_user_in_election
+from apolloassistant.registrar import send_email_with_codes
+
 # Parameters for everything
 ELGAMAL_PARAMS = elgamal.Cryptosystem()
 
@@ -628,6 +632,7 @@ def one_election_cast(request, election):
         )
 
     user = get_user(request)
+
     encrypted_vote = request.POST["encrypted_vote"]
 
     save_in_session_across_logouts(request, "encrypted_vote", encrypted_vote)
@@ -725,6 +730,24 @@ def password_voter_login(request, election):
 
     return HttpResponseRedirect(settings.SECURE_URL_HOST + return_url)
 
+def _posted_valid_cast_code(request, election):
+    cast_code = request.POST.get('cast_code')
+
+    if not cast_code:
+        return False
+
+    user = get_user(request)
+    
+    cast_code = CastCode.objects.filter(
+        user=user, election=election, value=cast_code).first()
+
+    if not cast_code:
+        return False
+
+    cast_code.used = True
+    cast_code.save()
+
+    return True
 
 @election_view()
 def one_election_cast_confirm(request, election):
@@ -783,7 +806,7 @@ def one_election_cast_confirm(request, election):
     else:
         cast_vote = None
 
-    if request.method == "GET":
+    if request.method == "GET" or not _posted_valid_cast_code(request, election):
         if voter:
             past_votes = CastVote.get_by_voter(voter)
             if len(past_votes) == 0:
@@ -1943,6 +1966,18 @@ def one_election(request, election):
 
     if not election:
         raise Http404("Election not found.")
+
+    user = get_user(request)
+
+    if not user:
+        raise Http404("User not found.")
+
+    generate_codes_for_user_in_election(user, election)
+
+    if not validate_email(user.user_id):
+        raise Http404("Assummed Google+. User does not have valid email.")
+
+    send_email_with_codes(user.user_id, election)
 
     return election.toJSONDict(complete=True)
 
