@@ -15,7 +15,7 @@ ASSISTANT.generateSessionData = function (sessionTitle) {
 ASSISTANT.handleStart = function () {
   const sessionTitle = document.querySelector('input[name="session_title"]').value
 
-  if (sessionTitle == '') {
+  if (sessionTitle.length === 0) {
     alert("Session title cannot be empty");
     return;
   }
@@ -24,7 +24,6 @@ ASSISTANT.handleStart = function () {
     alert("Session title cannot be greater than 50");
     return;
   }
-
   ASSISTANT.generateSessionData(sessionTitle);
   BOOTH.start_election();
 }

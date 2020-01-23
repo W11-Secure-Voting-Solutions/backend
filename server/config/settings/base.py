@@ -3,7 +3,6 @@ import environ
 import logging
 import socket
 
-
 # now that setting are deep inside the file structure, we need to manually dig ourselves out
 APPS_DIR = environ.Path(__file__) - 3
 
@@ -40,7 +39,6 @@ DATABASES = {
     }
 }
 
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -63,7 +61,6 @@ LANGUAGE_CODE = "en-us"
 
 SITE_ID = 1
 
-
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
@@ -80,7 +77,6 @@ STATICFILES_FINDERS = [
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = env("DJANGO_SECRET_KEY")
-
 
 SESSION_COOKIE_HTTPONLY = True
 
@@ -103,14 +99,20 @@ ROOT_URLCONF = "urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(APPS_DIR.path("templates")), str(APPS_DIR),],
+        "DIRS": [
+            str(APPS_DIR.path("templates")),
+            str(APPS_DIR),
+        ],
         "OPTIONS": {
-            "debug": DEBUG,
+            "debug":
+            DEBUG,
             "loaders": [
                 "django.template.loaders.filesystem.Loader",
                 "django.template.loaders.app_directories.Loader",
             ],
-            "context_processors": ["django.template.context_processors.request",],
+            "context_processors": [
+                "django.template.context_processors.request",
+            ],
         },
     },
 ]
@@ -119,7 +121,6 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backend.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackends",
 ]
-
 
 INSTALLED_APPS = (
     "django.contrib.auth",
@@ -159,7 +160,11 @@ SOCIALACCOUNT_PROVIDERS = {
             "key": "",
         }
     },
-    "github": {"SCOPE": ["user",]},
+    "github": {
+        "SCOPE": [
+            "user",
+        ]
+    },
 }
 
 INTERNAL_IPS = ["127.0.0.1"]
@@ -171,7 +176,6 @@ INTERNAL_IPS += [ip[:-1] + "1"]
 ##
 ## HELIOS
 ##
-
 
 MEDIA_ROOT = str(APPS_DIR.path("media"))
 
@@ -185,7 +189,6 @@ SERVER_EMAIL = "%s <%s>" % (DEFAULT_FROM_NAME, DEFAULT_FROM_EMAIL)
 
 LOGIN_URL = "/auth/"
 LOGOUT_ON_CONFIRMATION = True
-
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
@@ -222,9 +225,8 @@ HELIOS_PRIVATE_DEFAULT = False
 
 # authentication systems enabled
 # AUTH_ENABLED_AUTH_SYSTEMS = ['password','facebook','twitter', 'google', 'yahoo']
-AUTH_ENABLED_AUTH_SYSTEMS = env("AUTH_ENABLED_AUTH_SYSTEMS", default="google").split(
-    ","
-)
+AUTH_ENABLED_AUTH_SYSTEMS = env("AUTH_ENABLED_AUTH_SYSTEMS",
+                                default="google").split(",")
 AUTH_DEFAULT_AUTH_SYSTEM = env("AUTH_DEFAULT_AUTH_SYSTEM", default=None)
 
 # # email server
@@ -241,11 +243,11 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 if env("EMAIL_USE_AWS", default="0") == "1":
     EMAIL_BACKEND = "django_ses.SESBackend"
 
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
+logging.basicConfig(level=logging.DEBUG,
+                    format="%(asctime)s %(levelname)s %(message)s")
 
 GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default="")
 GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default="")
-
 
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="django://")
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL

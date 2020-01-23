@@ -1,0 +1,23 @@
+from django.test import TestCase
+from django.conf import settings
+
+from Crypto.PublicKey import RSA
+from Crypto.Signature import PKCS1_PSS
+from Crypto.Hash import SHA
+
+from apolloassistant.verification import (
+    sign,
+    verify,
+)
+
+TEST_PRIV_KEY = '-----BEGIN RSA PRIVATE KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApS7WZRLAEwQgsHMdwSX9\nAhFhESIHK0YIOdpKe/1lCqPO5I6N3kmj/0IlbCr/vwMvfgmuIJ+onHnQJwCemSjb\nDCISPIRQ25csUph13/XJpdMSmBAAJLFNy58nlhTzakxFHEgp8ofl2+xbPuj8Psbf\nTOXr9jCTrYsaZgLSQ63P6GdLblfhPZWFc6BTaCcUwm4hV4h1sfPHZ9Svq9AvbATo\nbNcLRp32iuM2B5myCjhsHQ6WGq6CP7v/p+M1mbXBVAkMmILrreQP8SNPrY97UwL9\nRC8mNVBwC9ZI+LfSFR3mB0FWZfHKcv8iI04gT8Yv4NKtVPY4qIXlBsXyPCLWWAdD\n7wIDAQAB\n-----END RSA PRIVATE KEY-----'
+TEST_PUB_KEY = '-----BEGIN RSA PUBLIC KEY-----\nMIIEowIBAAKCAQEApS7WZRLAEwQgsHMdwSX9AhFhESIHK0YIOdpKe/1lCqPO5I6N\n3kmj/0IlbCr/vwMvfgmuIJ+onHnQJwCemSjbDCISPIRQ25csUph13/XJpdMSmBAA\nJLFNy58nlhTzakxFHEgp8ofl2+xbPuj8PsbfTOXr9jCTrYsaZgLSQ63P6GdLblfh\nPZWFc6BTaCcUwm4hV4h1sfPHZ9Svq9AvbATobNcLRp32iuM2B5myCjhsHQ6WGq6C\nP7v/p+M1mbXBVAkMmILrreQP8SNPrY97UwL9RC8mNVBwC9ZI+LfSFR3mB0FWZfHK\ncv8iI04gT8Yv4NKtVPY4qIXlBsXyPCLWWAdD7wIDAQABAoIBAQCYSSoXXMX/whpx\nEnAoFeG/+k3HAdwiJRqIW5u329E/ke24AUUB3lp3hoABzVKiw0kRpdMG+Kr2N8eT\nbZrKEUSBVxgA+uugxypxq2Vg6LTTUFkgIABB08SpKT3Ru9b99PryLAWgN3HO44Tr\n5thG+An+VyrHedlscYYQ7iDzjFbVJoq+yJwswSleTLRu3xqLaNTgQ+CODgGf5W4u\nwhQEl2y8/3j47p9ylr79S4lqwz9BVnEi3giUPRlPoof2u460pvWJVfN46AqoXnhB\nY9oYT9qxNu4SKB6jCyJg6rczf0W1PHuoMw1MvW4zEze80vuep+Gh1dGJeGR9YKf/\nJa8AEgxBAoGBAMlJrzqMwqA4DiH66AI0AJUbtaE5ShY88b/s24oYXMI3zxT+IUcr\nFo3yELAZiZ9VjKRU+XrGvBLCyihF1FXuESiXycjHRxZz7mHYwQZ/ZbCJtYNZIGLg\nrRnxSmhe7FJBjzoD1oeFJUTZ/XRBFfd1kTmQqN9QAhtWDQG8l44VktHZAoGBANIU\n2Vjkut7/g/H1Skk8rFshbqnjw3ir8yFIwkxjn84gXtz6YBM+a2KY1nuD/gX+T3Id\nOvRyhLk79QoIzYQ1l3JzJDo+PI8fG0ReVts1f34K66phY9MGANdj+dgEXUxM3SwK\nUjexhXwSAfhxJReVbKsg9ZhChmgP6iaUiRqTxF8HAoGAMcDDzj4SsVWJsL568Gh4\nKGMD/wjRFjQUMTNThIvHCb6PsgmqohO1bHqDw3NcgAS+UbQrQjyzKhP5sgConmDM\n3vK9zqHrIVKgfpD8DSYaNYukUQYLqkUMpFfu42NrGF3aECX4teCkOKOFMWIREux9\na/QkuaXmD2myp1Y9Q8JzWukCgYBiAZP8IokDa5S0lkhXrlSCFzC3VShl7WH5jyYF\n2Rw+X1+iG7QihiY20zKMYOFrDl8lz3knfR1qBQyl58FpAk9q90hZW5uI8WwZEyHW\nFjkqJhIXZGPbmJtf4KY4HqEf7WPpHc+JZ+nsHcKJks9JF06g7zlkFPT7KyGDahwk\nJ/eelQKBgEoshos9nm4F1YDeHSHC7RsGMLI0kd/6hS1HuROJuvGoBrgx5ept/oMW\nP2wufBy+TicPPqPCNmshOFMug8JCWA0XGAl7hNXWALmTD2TYFwJTDO2gFiWb685z\nvc4I/XBeDIXVtuNqGAU+BPoBRRMfIdmNDS8SYNJLqSV+HOG2Pu1B\n-----END RSA PUBLIC KEY-----'
+
+
+class VerificationTest(TestCase):
+    def testSignVerify(self):
+        with self.settings(RSA_PRIVATE_KEY=TEST_PUB_KEY,
+                           RSA_PUBLIC_KEY=TEST_PRIV_KEY):
+            msg = 'abc'
+            s = sign(msg)
+            self.assertTrue(verify(msg, s))

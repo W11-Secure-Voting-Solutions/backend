@@ -936,28 +936,3 @@ class ElectionBlackboxTests(WebTest):
     #     FIXME: do the this test
     #     """
     #     pass
-
-
-class UtilityTests(TestCase):
-
-    def test_qr_code_creation_base64(self):
-
-        data_to_encode = "testtest"
-        encoded_qr_image = (
-            b"iVBORw0KGgoAAAANSUhEUgAAASIAAAEiAQAAAAB1xeIbAAABgElEQ"
-            b"VR4nO2aMW6EMBRE3w+WUoK0BzI3i3IzfJQ9QCTojSaFjcNmi6QhEL"
-            b"ALEPAkRmY0/nww8fMIL7+AoFKVqlSlKnV0yvJwWA9YPy1n+l11XYL"
-            b"ykqQRCN1sGmgkSXqk/l7XJaipeHxazG/m9td1KcqPzXPZeQBdJ6Tc"
-            b"t2OFDtv0jpVaxjL3rYAJzI+3aABr9x9V/f+m8tyH5PWmnJ8fzH9U9"
-            b"f+bSnP/5XFBRI+uP676M1Bm3bqwsZ7ZCLW+35YilfF+bIRXREMr4c"
-            b"f1VQ1HVX8GSgOzweTA3x3QKj2KnXWdm0opY9BEcsrnZVbQ1Pfa7an"
-            b"k+xLwejcHoQPrd9V1bionehkpadJmzE2dmvfbUCVzAGiiQveBmG4y"
-            b"mE176boQVfqY9nZ/FaGDtODurOvUVKkxKW20vMJqaGOtMbeknnppe"
-            b"d9EA4f5YR9dl6SCOaCNQCtpOIquE1LPfUzNhh9mR7L8TrquQLH+NM"
-            b"jSWNDI0l2oeb8ZZfXfqEpVqlKVugT1CeH0vMN7sIm9AAAAAElFTkS"
-            b"uQmCC"
-        )
-
-        encoded_data = utils.create_qr_code_in_base64(data_to_encode)
-
-        self.assertEquals(encoded_data, encoded_qr_image)

@@ -38,6 +38,7 @@ qrcode = "==6.1"
 djangorestframework = "^3.11.0"
 markdown = "^3.1.1"
 django-filter = "^2.2.0"
+pycrypto = "^=2.6.1"
 
 [tool.poetry.dev-dependencies]
 django-extensions= "^=1.9.9"
