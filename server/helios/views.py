@@ -29,6 +29,7 @@ from django.http import (
 )
 from validate_email import validate_email
 
+from apolloassistant.verification import sign
 from helios import utils, VOTERS_EMAIL, VOTERS_UPLOAD, url_names
 from helios.models import (
     User,
@@ -734,7 +735,7 @@ def password_voter_login(request, election):
     return HttpResponseRedirect(settings.SECURE_URL_HOST + return_url)
 
 
-def _posted_valid_cast_code(request, election):
+def _posted_valid_cast_code(request, election, encrypted_vote):
     cast_code = request.POST.get("cast_code")
     session_id = request.POST["session_id"]
 
@@ -753,14 +754,14 @@ def _posted_valid_cast_code(request, election):
     cast_code.used = True
     cast_code.save()
 
-    voter = Voter.objects.get(user=user, election=election)
     booth = FakeBooth.objects.get(id=session_id)
 
-    signature = sign(cast_code.value + voter.vote)
+    signature = base64.b64encode(sign(cast_code.value + encrypted_vote.decode())).decode()
+    booth.election = election
     booth.body.append(
         {
             "castedVoteWithCastCode": {
-                "encryptedVote": voter.vote,
+                "encryptedVote": encrypted_vote.decode(),
                 "castCode": cast_code.value,
                 "signature": signature,
             }
@@ -828,7 +829,7 @@ def one_election_cast_confirm(request, election):
     else:
         cast_vote = None
 
-    invalid_cast_code = request.method == "POST" and not _posted_valid_cast_code(request, election) 
+    invalid_cast_code = request.method == "POST" and not _posted_valid_cast_code(request, election, encrypted_vote)
     if request.method == "GET" or invalid_cast_code:
         if voter:
             past_votes = CastVote.get_by_voter(voter)

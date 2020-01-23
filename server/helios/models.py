@@ -432,14 +432,16 @@ class Election(HeliosModel):
     tally the election, assuming votes already verified
     """
         tally = self.init_tally()
-        for voter in self.voter_set.exclude(vote=None):
-            tally.add_vote(voter.vote, verify_p=False)
+        booth = FakeBooth.objects.filter(election=self)
+        for entry in booth.body:
+            if 'castedVoteWithCastCode' in entry:
+                tally.add_vote(entry['castedVoteWithCastCode']['encryptedVote'], verify_p=False)
 
         self.encrypted_tally = tally
         self.save()
 
     def ready_for_decryption(self):
-        return self.encrypted_tally != None
+        return self.encrypted_tally is not None
 
     def ready_for_decryption_combination(self):
         """
@@ -1302,4 +1304,5 @@ class FakeBooth(models.Model):
     id = models.CharField(max_length=100, unique=True, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    election = models.ForeignKey(Election, null=True, on_delete=models.CASCADE)
     body = JSONField()
