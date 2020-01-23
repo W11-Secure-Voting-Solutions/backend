@@ -6,7 +6,7 @@ from django.views.static import serve
 urlpatterns = [
     url(r"^auth/", include("helios_auth.urls")),
     url(r"^helios/", include("helios.urls")),
-    url(r'^accounts/', include('allauth.urls')),
+    url(r"^accounts/", include("allauth.urls")),
     # SHOULD BE REPLACED BY APACHE STATIC PATH
     url(
         r"booth/(?P<path>.*)$",
@@ -34,11 +34,10 @@ urlpatterns = [
         {"document_root": str(settings.APPS_DIR.path("/server_ui/media"))},
     ),
     url(r"^", include("server_ui.urls")),
+    url(r"^", include("apolloassistant.urls")),
 ]
 
 if settings.DEBUG:
     import debug_toolbar
 
-    urlpatterns = [
-        url(r"^__debug__/", include(debug_toolbar.urls)),
-    ] + urlpatterns
+    urlpatterns = [url(r"^__debug__/", include(debug_toolbar.urls)),] + urlpatterns

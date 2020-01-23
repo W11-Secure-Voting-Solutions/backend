@@ -56,6 +56,6 @@ urlpatterns = [
 ]
 
 router = DefaultRouter()
-router.register(r'fake-booth', viewsets.FakeBoothViewSet)
+router.register(r"fake-booth", viewsets.FakeBoothViewSet)
 
-urlpatterns += [url(r'^', include(router.urls))]
+urlpatterns += [url(r"^", include(router.urls))]
