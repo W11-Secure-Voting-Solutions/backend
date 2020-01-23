@@ -8,15 +8,10 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('helios', '0004_alter_voter'),
+        ("helios", "0004_alter_voter"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='qrcode',
-            name='voter',
-        ),
-        migrations.DeleteModel(
-            name='QrCode',
-        ),
+        migrations.RemoveField(model_name="qrcode", name="voter",),
+        migrations.DeleteModel(name="QrCode",),
     ]

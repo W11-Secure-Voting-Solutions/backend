@@ -38,7 +38,8 @@ from helios.models import (
     VoterFile,
     Trustee,
     AuditedBallot,
-    FakeBooth)
+    FakeBooth,
+)
 from helios_auth import views as auth_views
 from helios_auth.auth_systems import AUTH_SYSTEMS, can_list_categories
 from helios_auth.models import AuthenticationExpired
@@ -733,16 +734,17 @@ def password_voter_login(request, election):
 
 
 def _posted_valid_cast_code(request, election):
-    cast_code = request.POST.get('cast_code')
-    session_id = request.POST['session_id']
+    cast_code = request.POST.get("cast_code")
+    session_id = request.POST["session_id"]
 
     if not cast_code:
         return False
 
     user = get_user(request)
-    
+
     cast_code = CastCode.objects.filter(
-        user=user, election=election, value=cast_code).first()
+        user=user, election=election, value=cast_code
+    ).first()
 
     if not cast_code:
         return False
@@ -754,16 +756,19 @@ def _posted_valid_cast_code(request, election):
     booth = FakeBooth.objects.get(id=session_id)
 
     signature = sign(cast_code.value + voter.vote)
-    booth.body.append({
-        'castedVoteWithCastCode': {
-            'encryptedVote': voter.vote,
-            'castCode': cast_code.value,
-            'signature': signature
+    booth.body.append(
+        {
+            "castedVoteWithCastCode": {
+                "encryptedVote": voter.vote,
+                "castCode": cast_code.value,
+                "signature": signature,
+            }
         }
-    })
+    )
     booth.save()
 
     return True
+
 
 @election_view()
 def one_election_cast_confirm(request, election):

@@ -16,30 +16,26 @@ urlpatterns = [
     url(r"^meta$", views.one_election_meta, name=names.ELECTION_META),
     # edit election params
     url(r"^edit$", views.one_election_edit, name=names.ELECTION_EDIT),
-    url(r"^schedule$",
-        views.one_election_schedule,
-        name=names.ELECTION_SCHEDULE),
+    url(r"^schedule$", views.one_election_schedule, name=names.ELECTION_SCHEDULE),
     url(r"^extend$", views.one_election_extend, name=names.ELECTION_EXTEND),
     url(r"^archive$", views.one_election_archive, name=names.ELECTION_ARCHIVE),
     url(r"^copy$", views.one_election_copy, name=names.ELECTION_COPY),
     # badge
     url(r"^badge$", helios.views.election_badge, name=names.ELECTION_BADGE),
     # adding trustees
-    url(r"^trustees/$", views.list_trustees,
-        name=names.ELECTION_TRUSTEES_HOME),
-    url(r"^trustees/view$",
-        views.list_trustees_view,
-        name=names.ELECTION_TRUSTEES_VIEW),
-    url(r"^trustees/new$", views.new_trustee,
-        name=names.ELECTION_TRUSTEES_NEW),
+    url(r"^trustees/$", views.list_trustees, name=names.ELECTION_TRUSTEES_HOME),
+    url(
+        r"^trustees/view$", views.list_trustees_view, name=names.ELECTION_TRUSTEES_VIEW
+    ),
+    url(r"^trustees/new$", views.new_trustee, name=names.ELECTION_TRUSTEES_NEW),
     url(
         r"^trustees/add-helios$",
         views.new_trustee_helios,
         name=names.ELECTION_TRUSTEES_ADD_HELIOS,
     ),
-    url(r"^trustees/delete$",
-        views.delete_trustee,
-        name=names.ELECTION_TRUSTEES_DELETE),
+    url(
+        r"^trustees/delete$", views.delete_trustee, name=names.ELECTION_TRUSTEES_DELETE
+    ),
     # trustee pages
     url(
         r"^trustees/(?P<trustee_uuid>[^/]+)/home$",
@@ -91,17 +87,11 @@ urlpatterns = [
         name=names.ELECTION_AUDITED_BALLOTS,
     ),
     # get randomness
-    url(r"^get-randomness$",
-        views.get_randomness,
-        name=names.ELECTION_GET_RANDOMNESS),
+    url(r"^get-randomness$", views.get_randomness, name=names.ELECTION_GET_RANDOMNESS),
     # server-side encryption
-    url(r"^encrypt-ballot$",
-        views.encrypt_ballot,
-        name=names.ELECTION_ENCRYPT_BALLOT),
+    url(r"^encrypt-ballot$", views.encrypt_ballot, name=names.ELECTION_ENCRYPT_BALLOT),
     # construct election
-    url(r"^questions$",
-        views.one_election_questions,
-        name=names.ELECTION_QUESTIONS),
+    url(r"^questions$", views.one_election_questions, name=names.ELECTION_QUESTIONS),
     url(r"^set_reg$", views.one_election_set_reg, name=names.ELECTION_SET_REG),
     url(
         r"^set_featured$",
@@ -113,11 +103,10 @@ urlpatterns = [
         views.one_election_save_questions,
         name=names.ELECTION_SAVE_QUESTIONS,
     ),
-    url(r"^register$",
-        views.one_election_register,
-        name=names.ELECTION_REGISTER),
-    url(r"^freeze$", views.one_election_freeze,
-        name=names.ELECTION_FREEZE),  # includes freeze_2 as POST target
+    url(r"^register$", views.one_election_register, name=names.ELECTION_REGISTER),
+    url(
+        r"^freeze$", views.one_election_freeze, name=names.ELECTION_FREEZE
+    ),  # includes freeze_2 as POST target
     # computing tally
     url(
         r"^compute_tally$",
@@ -129,9 +118,7 @@ urlpatterns = [
         views.combine_decryptions,
         name=names.ELECTION_COMBINE_DECRYPTIONS,
     ),
-    url(r"^release_result$",
-        views.release_result,
-        name=names.ELECTION_RELEASE_RESULT),
+    url(r"^release_result$", views.release_result, name=names.ELECTION_RELEASE_RESULT),
     # casting a ballot before we know who the voter is
     url(r"^cast$", views.one_election_cast, name=names.ELECTION_CAST),
     url(
@@ -144,9 +131,7 @@ urlpatterns = [
         views.password_voter_login,
         name=names.ELECTION_PASSWORD_VOTER_LOGIN,
     ),
-    url(r"^cast_done$",
-        views.one_election_cast_done,
-        name=names.ELECTION_CAST_DONE),
+    url(r"^cast_done$", views.one_election_cast_done, name=names.ELECTION_CAST_DONE),
     # post audited ballot
     url(
         r"^post-audited-ballot",
@@ -155,9 +140,7 @@ urlpatterns = [
     ),
     # managing voters
     url(r"^voters/$", views.voter_list, name=names.ELECTION_VOTERS_LIST),
-    url(r"^voters/upload$",
-        views.voters_upload,
-        name=names.ELECTION_VOTERS_UPLOAD),
+    url(r"^voters/upload$", views.voters_upload, name=names.ELECTION_VOTERS_UPLOAD),
     url(
         r"^voters/upload-cancel$",
         views.voters_upload_cancel,
@@ -173,12 +156,8 @@ urlpatterns = [
         views.voters_eligibility,
         name=names.ELECTION_VOTERS_ELIGIBILITY,
     ),
-    url(r"^voters/email$",
-        views.voters_email,
-        name=names.ELECTION_VOTERS_EMAIL),
-    url(r"^voters/(?P<voter_uuid>[^/]+)$",
-        views.one_voter,
-        name=names.ELECTION_VOTER),
+    url(r"^voters/email$", views.voters_email, name=names.ELECTION_VOTERS_EMAIL),
+    url(r"^voters/(?P<voter_uuid>[^/]+)$", views.one_voter, name=names.ELECTION_VOTER),
     url(
         r"^voters/(?P<voter_uuid>[^/]+)/delete$",
         views.voter_delete,

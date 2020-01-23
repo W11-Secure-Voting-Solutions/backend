@@ -391,9 +391,7 @@ class Election(HeliosModel):
         voting_end = (
             self.voting_ended_at or self.voting_extended_until or self.voting_ends_at
         )
-        return (
-            voting_end is not None and now() >= voting_end
-        ) or self.encrypted_tally
+        return (voting_end is not None and now() >= voting_end) or self.encrypted_tally
 
     @property
     def issues_before_freeze(self):
@@ -872,9 +870,9 @@ class VoterFile(models.Model):
 class Voter(HeliosModel):
     election = models.ForeignKey(Election, on_delete=models.CASCADE)
 
-    session_title = models.TextField(max_length=50, default='')
-    session_id = models.TextField(default='')
-    qr_code = models.TextField(default='')
+    session_title = models.TextField(max_length=50, default="")
+    session_id = models.TextField(default="")
+    qr_code = models.TextField(default="")
 
     # let's link directly to the user now
     # FIXME: delete this as soon as migrations are set up
@@ -920,7 +918,7 @@ class Voter(HeliosModel):
     def register_user_in_election(cls, user, election):
         voter_uuid = str(uuid.uuid4())
         voter = Voter(uuid=voter_uuid, user=user, election=election)
-        
+
         # do we need to generate an alias?
         if election.use_voter_aliases:
             heliosutils.lock_row(Election, election.id)

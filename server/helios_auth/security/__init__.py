@@ -76,8 +76,9 @@ def get_api_client(request):
 def login_required(func):
     def login_required_wrapper(request, *args, **kw):
         if not (get_user(request) or get_api_client(request)):
-            return HttpResponseRedirect(settings.LOGIN_URL + "?return_url=" +
-                                        request.get_full_path())
+            return HttpResponseRedirect(
+                settings.LOGIN_URL + "?return_url=" + request.get_full_path()
+            )
 
         return func(request, *args, **kw)
 
@@ -103,8 +104,9 @@ def get_user(request):
 
     # set up CSRF protection if needed
     if "csrf_token" not in request.session or (
-            type(request.session["csrf_token"]) != str
-            and type(request.session["csrf_token"]) != str):
+        type(request.session["csrf_token"]) != str
+        and type(request.session["csrf_token"]) != str
+    ):
         request.session["csrf_token"] = str(uuid.uuid4())
 
     if "user" in request.session:
@@ -121,8 +123,9 @@ def check_csrf(request):
     if request.method != "POST":
         return HttpResponseNotAllowed("only a POST for this URL")
 
-    if ("csrf_token" not in request.POST) or (request.POST["csrf_token"] !=
-                                              request.session["csrf_token"]):
+    if ("csrf_token" not in request.POST) or (
+        request.POST["csrf_token"] != request.session["csrf_token"]
+    ):
         raise Exception("A CSRF problem was detected")
 
 

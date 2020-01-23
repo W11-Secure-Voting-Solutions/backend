@@ -25,6 +25,7 @@ import random
 import qrcode
 import logging
 
+
 def split_by_length(str, length, rejoin_with=None):
     """
   split a string by a given length
@@ -32,7 +33,7 @@ def split_by_length(str, length, rejoin_with=None):
     str_arr = []
     counter = 0
     while counter < len(str):
-        str_arr.append(str[counter: counter + length])
+        str_arr.append(str[counter : counter + length])
         counter += length
 
     if rejoin_with:
@@ -204,8 +205,7 @@ def lock_row(model, pk):
     cursor = connection.cursor()
 
     cursor.execute(
-        "select * from " + model._meta.db_table +
-        " where id = %s for update", [pk]
+        "select * from " + model._meta.db_table + " where id = %s for update", [pk]
     )
     row = cursor.fetchone()
 
@@ -221,8 +221,9 @@ def lock_row(model, pk):
 def create_qr_code_in_base64(data: str) -> str:
     qr_code_image = create_qr_code(data)
     byteIO = io.BytesIO()
-    qr_code_image.save(byteIO, format='PNG')
+    qr_code_image.save(byteIO, format="PNG")
     return base64.b64encode(byteIO.getvalue()).decode()
+
 
 def create_qr_code(data) -> PIL.Image:
     qr = qrcode.QRCode(

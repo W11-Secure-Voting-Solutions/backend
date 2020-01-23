@@ -10,27 +10,29 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('helios', '0006_fakebooth'),
-        ('apolloassistant', '0003_auto_20200122_2038'),
+        ("helios", "0006_fakebooth"),
+        ("apolloassistant", "0003_auto_20200122_2038"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='castcode',
-            name='election',
+            model_name="castcode",
+            name="election",
             field=models.ForeignKey(
-                default='',
+                default="",
                 on_delete=django.db.models.deletion.CASCADE,
-                to='helios.Election'),
+                to="helios.Election",
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='lockincode',
-            name='election',
+            model_name="lockincode",
+            name="election",
             field=models.ForeignKey(
-                default='',
+                default="",
                 on_delete=django.db.models.deletion.CASCADE,
-                to='helios.Election'),
+                to="helios.Election",
+            ),
             preserve_default=False,
         ),
     ]

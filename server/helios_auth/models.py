@@ -34,7 +34,7 @@ class User(models.Model):
     admin_p = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = (("user_type", "user_id"), )
+        unique_together = (("user_type", "user_id"),)
         app_label = "helios_auth"
 
     @classmethod
@@ -50,20 +50,11 @@ class User(models.Model):
         return cls.objects.get(user_type=user_type, user_id=user_id)
 
     @classmethod
-    def update_or_create(cls,
-                         user_type,
-                         user_id,
-                         name=None,
-                         info=None,
-                         token=None):
+    def update_or_create(cls, user_type, user_id, name=None, info=None, token=None):
         obj, created_p = cls.objects.get_or_create(
             user_type=user_type,
             user_id=user_id,
-            defaults={
-                "name": name,
-                "info": info,
-                "token": token
-            },
+            defaults={"name": name, "info": info, "token": token},
         )
 
         if not created_p:
@@ -92,8 +83,7 @@ class User(models.Model):
         if self.user_type not in AUTH_SYSTEMS:
             return False
 
-        return AUTH_SYSTEMS[self.user_type].can_create_election(
-            self.user_id, self.info)
+        return AUTH_SYSTEMS[self.user_type].can_create_election(self.user_id, self.info)
 
     def update_status_template(self):
         if not self.can_update_status():
@@ -103,20 +93,23 @@ class User(models.Model):
 
     def update_status(self, status):
         if self.user_type in AUTH_SYSTEMS:
-            AUTH_SYSTEMS[self.user_type].update_status(self.user_id, self.info,
-                                                       self.token, status)
+            AUTH_SYSTEMS[self.user_type].update_status(
+                self.user_id, self.info, self.token, status
+            )
 
     def send_message(self, subject, body):
         if self.user_type in AUTH_SYSTEMS:
             subject = subject.split("\n")[0]
-            AUTH_SYSTEMS[self.user_type].send_message(self.user_id, self.name,
-                                                      self.info, subject, body)
+            AUTH_SYSTEMS[self.user_type].send_message(
+                self.user_id, self.name, self.info, subject, body
+            )
 
     def send_notification(self, message):
         if self.user_type in AUTH_SYSTEMS:
             if hasattr(AUTH_SYSTEMS[self.user_type], "send_notification"):
                 AUTH_SYSTEMS[self.user_type].send_notification(
-                    self.user_id, self.info, message)
+                    self.user_id, self.info, message
+                )
 
     def is_eligible_for(self, eligibility_case):
         """
@@ -176,14 +169,14 @@ class User(models.Model):
         public_url = self.public_url
 
         if public_url:
-            name_display = '<a href="%s">%s</a>' % (public_url,
-                                                    self.pretty_name)
+            name_display = '<a href="%s">%s</a>' % (public_url, self.pretty_name)
         else:
             name_display = self.pretty_name
 
         return (
             """<img class="%s-logo" src="/static/login-icons/%s.png" alt="%s" /> %s"""
-            % (size, self.user_type, self.user_type, name_display))
+            % (size, self.user_type, self.user_type, name_display)
+        )
 
     @property
     def display_html_small(self):

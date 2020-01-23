@@ -11,19 +11,39 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('helios', '0005_remove_qrcode'),
-        ('helios_auth', '0001_initial'),
+        ("helios", "0005_remove_qrcode"),
+        ("helios_auth", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AssistantSession',
+            name="AssistantSession",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('session_title', models.TextField(default='', max_length=50)),
-                ('session_id', models.TextField(default='')),
-                ('election', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='helios.Election')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='helios_auth.User')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("session_title", models.TextField(default="", max_length=50)),
+                ("session_id", models.TextField(default="")),
+                (
+                    "election",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="helios.Election",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="helios_auth.User",
+                    ),
+                ),
             ],
         ),
     ]

@@ -99,20 +99,14 @@ ROOT_URLCONF = "urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            str(APPS_DIR.path("templates")),
-            str(APPS_DIR),
-        ],
+        "DIRS": [str(APPS_DIR.path("templates")), str(APPS_DIR),],
         "OPTIONS": {
-            "debug":
-            DEBUG,
+            "debug": DEBUG,
             "loaders": [
                 "django.template.loaders.filesystem.Loader",
                 "django.template.loaders.app_directories.Loader",
             ],
-            "context_processors": [
-                "django.template.context_processors.request",
-            ],
+            "context_processors": ["django.template.context_processors.request",],
         },
     },
 ]
@@ -159,11 +153,7 @@ SOCIALACCOUNT_PROVIDERS = {
             "key": "",
         }
     },
-    "github": {
-        "SCOPE": [
-            "user",
-        ]
-    },
+    "github": {"SCOPE": ["user",]},
 }
 
 INTERNAL_IPS = []
@@ -220,8 +210,9 @@ HELIOS_PRIVATE_DEFAULT = False
 
 # authentication systems enabled
 # AUTH_ENABLED_AUTH_SYSTEMS = ['password','facebook','twitter', 'google', 'yahoo']
-AUTH_ENABLED_AUTH_SYSTEMS = env("AUTH_ENABLED_AUTH_SYSTEMS",
-                                default="google").split(",")
+AUTH_ENABLED_AUTH_SYSTEMS = env("AUTH_ENABLED_AUTH_SYSTEMS", default="google").split(
+    ","
+)
 AUTH_DEFAULT_AUTH_SYSTEM = env("AUTH_DEFAULT_AUTH_SYSTEM", default=None)
 
 # email server
@@ -237,8 +228,7 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS", default="0") == "1"
 if env("EMAIL_USE_AWS", default="0") == "1":
     EMAIL_BACKEND = "django_ses.SESBackend"
 
-logging.basicConfig(level=logging.DEBUG,
-                    format="%(asctime)s %(levelname)s %(message)s")
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
 
 GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default="")
 GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default="")
@@ -258,7 +248,7 @@ SECURE_HSTS_PRELOAD = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = "/"
 
 RSA_PRIVATE_KEY = env("RSA_PRIVATE_KEY")
 RSA_PUBLIC_KEY = env("RSA_PUBLIC_KEY")

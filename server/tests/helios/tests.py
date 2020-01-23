@@ -155,7 +155,6 @@ class ElectionModelTests(TestCase):
         e = models.Election.objects.get(uuid=self.election.uuid)
         assert e.eligibility == [{"auth_system": self.user.user_type}]
 
-
         self.election.openreg = True
 
         # without openreg, and now true
@@ -258,8 +257,7 @@ class CastVoteModelTests(TestCase):
         )
 
         # register the voter
-        self.voter = models.Voter.register_user_in_election(
-            self.user, self.election)
+        self.voter = models.Voter.register_user_in_election(self.user, self.election)
 
     # def test_cast_vote(self):
     #     pass
@@ -570,24 +568,20 @@ class ElectionBlackboxTests(WebTest):
         # override with the given
         full_election_params.update(election_params or {})
 
-        response = self.client.post(
-            "/helios/elections/new", full_election_params)
+        response = self.client.post("/helios/elections/new", full_election_params)
 
         # we are redirected to the election, let's extract the ID out of the URL
-        election_id = re.search(
-            "/elections/([^/]+)/", str(response["Location"]))
+        election_id = re.search("/elections/([^/]+)/", str(response["Location"]))
         self.assertIsNotNone(
             election_id,
-            "Election id not found in redirect: %s" % str(
-                response["Location"]),
+            "Election id not found in redirect: %s" % str(response["Location"]),
         )
         election_id = election_id.group(1)
 
         # helios is automatically added as a trustee
 
         # check that helios is indeed a trustee
-        response = self.client.get(
-            "/helios/elections/%s/trustees/view" % election_id)
+        response = self.client.get("/helios/elections/%s/trustees/view" % election_id)
         assert "Trustee #1" in response.content.decode()
 
         # add a few voters with an improperly placed email address
@@ -615,28 +609,23 @@ class ElectionBlackboxTests(WebTest):
 
         # now we confirm the upload
         response = self.client.post(
-            "/helios/elections/%s/voters/upload" % election_id, {
-                "confirm_p": "1"}
+            "/helios/elections/%s/voters/upload" % election_id, {"confirm_p": "1"}
         )
-        self.assertRedirects(
-            response, "/helios/elections/%s/voters/list" % election_id)
+        self.assertRedirects(response, "/helios/elections/%s/voters/list" % election_id)
 
         # and we want to check that there are now voters
-        response = self.client.get(
-            "/helios/elections/%s/voters/" % election_id)
+        response = self.client.get("/helios/elections/%s/voters/" % election_id)
         NUM_VOTERS = 4
         self.assertEquals(len(utils.from_json(response.content)), NUM_VOTERS)
 
         # let's get a single voter
-        single_voter = models.Election.objects.get(
-            uuid=election_id).voter_set.all()[0]
+        single_voter = models.Election.objects.get(uuid=election_id).voter_set.all()[0]
         response = self.client.get(
             "/helios/elections/%s/voters/%s" % (election_id, single_voter.uuid)
         )
         assert '"uuid": "%s"' % single_voter.uuid in response.content.decode()
 
-        response = self.client.get(
-            "/helios/elections/%s/voters/foobar" % election_id)
+        response = self.client.get("/helios/elections/%s/voters/foobar" % election_id)
         self.assertStatusCode(response, 404)
 
         # add questions
@@ -669,8 +658,7 @@ class ElectionBlackboxTests(WebTest):
             "/helios/elections/%s/freeze" % election_id,
             {"csrf_token": self.client.session["csrf_token"]},
         )
-        self.assertRedirects(
-            response, "/helios/elections/%s/view" % election_id)
+        self.assertRedirects(response, "/helios/elections/%s/view" % election_id)
 
         # email the voters
         num_messages_before = len(mail.outbox)
@@ -684,8 +672,7 @@ class ElectionBlackboxTests(WebTest):
                 "send_to": "all",
             },
         )
-        self.assertRedirects(
-            response, "/helios/elections/%s/view" % election_id)
+        self.assertRedirects(response, "/helios/elections/%s/view" % election_id)
         num_messages_after = len(mail.outbox)
         self.assertEquals(num_messages_after - num_messages_before, NUM_VOTERS)
 
@@ -724,8 +711,7 @@ class ElectionBlackboxTests(WebTest):
         # parse it as an encrypted vote with randomness, and make sure randomness is there
         the_ballot = utils.from_json(response.testbody)
         assert the_ballot["answers"][0].has_key("randomness"), "no randomness"
-        assert len(the_ballot["answers"][0]["randomness"]
-                   ) == 2, "not enough randomness"
+        assert len(the_ballot["answers"][0]["randomness"]) == 2, "not enough randomness"
 
         # parse it as an encrypted vote, and re-serialize it
         ballot = datatypes.LDObject.fromDict(
@@ -772,15 +758,13 @@ class ElectionBlackboxTests(WebTest):
 
         self.assertRedirects(
             response,
-            "%s/helios/elections/%s/cast_done" % (
-                settings.URL_HOST, election_id),
+            "%s/helios/elections/%s/cast_done" % (settings.URL_HOST, election_id),
         )
 
         # at this point an email should have gone out to the user
         # at position num_messages after, since that was the len() before we cast this ballot
         email_message = mail.outbox[len(mail.outbox) - 1]
-        url = re.search("https?://[^/]+(/[^ \n]*)",
-                        email_message.body).group(1)
+        url = re.search("https?://[^/]+(/[^ \n]*)", email_message.body).group(1)
 
         # check that we can get at that URL
         if not need_login:
@@ -821,8 +805,7 @@ class ElectionBlackboxTests(WebTest):
             "/helios/elections/%s/compute_tally" % election_id,
             {"csrf_token": self.client.session["csrf_token"]},
         )
-        self.assertRedirects(
-            response, "/helios/elections/%s/view" % election_id)
+        self.assertRedirects(response, "/helios/elections/%s/view" % election_id)
 
         # should trigger helios decryption automatically
         self.assertNotEquals(
@@ -835,12 +818,11 @@ class ElectionBlackboxTests(WebTest):
         # combine decryptions
         response = self.client.post(
             "/helios/elections/%s/combine_decryptions" % election_id,
-            {"csrf_token": self.client.session["csrf_token"], },
+            {"csrf_token": self.client.session["csrf_token"],},
         )
 
         # after tallying, we now go back to election_view
-        self.assertRedirects(
-            response, "/helios/elections/%s/view" % election_id)
+        self.assertRedirects(response, "/helios/elections/%s/view" % election_id)
 
         # check that we can't get the tally yet
         response = self.client.get("/helios/elections/%s/result" % election_id)
@@ -849,7 +831,7 @@ class ElectionBlackboxTests(WebTest):
         # release
         response = self.client.post(
             "/helios/elections/%s/release_result" % election_id,
-            {"csrf_token": self.client.session["csrf_token"], },
+            {"csrf_token": self.client.session["csrf_token"],},
         )
 
         # check that tally matches

@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('helios', '0002_qrcode'),
+        ("helios", "0002_qrcode"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='voter',
-            name='session_title',
-            field=models.TextField(default='', max_length=50),
+            model_name="voter",
+            name="session_title",
+            field=models.TextField(default="", max_length=50),
         ),
     ]

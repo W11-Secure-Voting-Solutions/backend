@@ -1,5 +1,3 @@
 from .base import *  # noqa
 
-INSTALLED_APPS += (
-    "django_extensions",
-)
+INSTALLED_APPS += ("django_extensions",)

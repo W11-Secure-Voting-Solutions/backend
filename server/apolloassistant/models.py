@@ -28,9 +28,9 @@ class CastCode(models.Model):
 
     @classmethod
     def create_for_election(cls, user: User, election: Election) -> None:
-        cls.objects.bulk_create([
-            cls(user=user, election=election) for _ in range(NUM_OF_CAST_CODES)
-        ])
+        cls.objects.bulk_create(
+            [cls(user=user, election=election) for _ in range(NUM_OF_CAST_CODES)]
+        )
 
 
 class LockInCode(models.Model):

@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('apolloassistant', '0001_initial'),
+        ("apolloassistant", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='assistantsession',
-            name='secret_key',
-            field=models.TextField(default=''),
+            model_name="assistantsession",
+            name="secret_key",
+            field=models.TextField(default=""),
         ),
     ]
