@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.staticfiles",
+    "rest_framework"
     "debug_toolbar",
     "corsheaders",
     "allauth",
@@ -138,6 +139,7 @@ INSTALLED_APPS = (
     "helios_auth.apps.HeliosAuthConfig",
     "helios.apps.HeliosConfig",
     "server_ui.apps.ServerUiConfig",
+    "apolloassistant"
 )
 
 SOCIALACCOUNT_PROVIDERS = {
