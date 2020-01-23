@@ -4,6 +4,12 @@ steps:
   id: docker-build
   args: ['build', '-t', 'gcr.io/$_PROJECT/${_APP_NAME}:$BRANCH_NAME-$SHORT_SHA', '.', '-f', 'docker/prod/server/Dockerfile']
 
+- name: 'docker/compose'
+  id: tests
+  env:
+    - 'IMG=gcr.io/$PROJECT_ID/${_APP_NAME}:$BRANCH_NAME-$SHORT_SHA'
+  args: ['run', '-f', 'docker-compose.ci.yml','--rm', 'ci_test']
+
 images: ['gcr.io/$PROJECT_ID/${_APP_NAME}:$BRANCH_NAME-$SHORT_SHA']
 
 substitutions:

@@ -799,7 +799,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 version = "2.4.5"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
@@ -829,7 +829,7 @@ checkqa-mypy = ["mypy (v0.761)"]
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xmlschema"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Pytest plugin for measuring coverage."
 name = "pytest-cov"
 optional = false
@@ -844,7 +844,7 @@ pytest = ">=3.6"
 testing = ["fields", "hunter", "process-tests (2.0.2)", "six", "virtualenv"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "A Django plugin for pytest."
 name = "pytest-django"
 optional = false
@@ -859,7 +859,7 @@ docs = ["sphinx", "sphinx-rtd-theme"]
 testing = ["django", "django-configurations (>=2.0)", "six"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Factory Boy support for pytest."
 name = "pytest-factoryboy"
 optional = false
@@ -872,7 +872,7 @@ inflection = "*"
 pytest = ">=3.3.2"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Faker integration with the pytest framework."
 name = "pytest-faker"
 optional = false
@@ -883,7 +883,7 @@ version = "2.0.0"
 Faker = ">=0.7.3"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "run tests in isolated forked subprocesses"
 name = "pytest-forked"
 optional = false
@@ -894,7 +894,7 @@ version = "1.1.3"
 pytest = ">=3.1.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Thin-wrapper around the mock package for easier use with py.test"
 name = "pytest-mock"
 optional = false
@@ -908,7 +908,7 @@ pytest = ">=2.7"
 dev = ["pre-commit", "tox"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Pytest PuDB debugger integration"
 name = "pytest-pudb"
 optional = false
@@ -936,7 +936,7 @@ pytest = ">=2.9"
 termcolor = ">=1.1.0"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "pytest xdist plugin for distributed testing and loop-on-failing modes"
 name = "pytest-xdist"
 optional = false

@@ -4,6 +4,12 @@ steps:
   id: docker-build
   args: ['build', '-t', 'gcr.io/$_PROJECT/${_APP_NAME}:master-$SHORT_SHA', '-t', 'gcr.io/$_PROJECT/${_APP_NAME}:master', '.', '-f', 'docker/prod/server/Dockerfile']
 
+- name: 'docker/compose'
+  id: tests
+  env:
+    - 'IMG=gcr.io/$PROJECT_ID/${_APP_NAME}:master-$SHORT_SHA'
+  args: ['run', '-f', 'docker-compose.ci.yml','--rm', 'ci_test']
+
 - name: 'gcr.io/cloud-builders/kubectl'
   id: kubectl-deploy-backend
   args: ['set', 'image', 'deployment', '${_APP_NAME}', '${_APP_NAME}=gcr.io/$_PROJECT/${_APP_NAME}:master-$SHORT_SHA']

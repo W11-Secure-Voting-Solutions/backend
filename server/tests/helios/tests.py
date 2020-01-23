@@ -931,8 +931,3 @@ class ElectionBlackboxTests(WebTest):
     #     response = self.client.get("/helios/elections/%s/voters/list" % election_id)
     #     assert "Only the voters listed here" in response.content.decode()
     #
-    # def test_do_complete_election_with_trustees(self):
-    #     """
-    #     FIXME: do the this test
-    #     """
-    #     pass
