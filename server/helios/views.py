@@ -828,7 +828,8 @@ def one_election_cast_confirm(request, election):
     else:
         cast_vote = None
 
-    if request.method == "GET" or not _posted_valid_cast_code(request, election):
+    invalid_cast_code = request.method == "POST" and not _posted_valid_cast_code(request, election) 
+    if request.method == "GET" or invalid_cast_code:
         if voter:
             past_votes = CastVote.get_by_voter(voter)
             if len(past_votes) == 0:
@@ -897,6 +898,7 @@ def one_election_cast_confirm(request, election):
                 "password_only": password_only,
                 "password_login_form": password_login_form,
                 "bad_voter_login": bad_voter_login,
+                "invalid_cast_code": invalid_cast_code,
             },
         )
 

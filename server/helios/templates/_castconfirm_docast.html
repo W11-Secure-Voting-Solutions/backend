@@ -18,6 +18,13 @@
     You are logged in as <u>{{voter.display_html_big|safe}}</u><br /><br />
 
     <button type="submit" class="large">CAST this ballot</button>
+
+    {% if invalid_cast_code %}
+
+    <br><span style="font-size: 1em; color: #ff0000;">Please provide valid cast code.</span>
+
+    {% endif %}
+
     <input name="cast_code" type="text" placeholder="Enter cast code" required>
     <input name="session_id" type="hidden" value="">
     <span style="font-size:0.8em;"><br />You can cast as many ballots as you want.<br />Only the last one counts.</span>
