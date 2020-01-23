@@ -24,6 +24,75 @@ services:
     env_file:
       - .envs/.django
       - .envs/.postgres
+    environment:
+      - |
+        RSA_PRIVATE_KEY=-----BEGIN RSA PRIVATE KEY-----
+        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
+        -----END RSA PRIVATE KEY-----
+
+      - |
+        RSA_PUBLIC_KEY=-----BEGIN PUBLIC KEY-----
+        MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEApHTFRuG90V1nncnKrelx
+        9pEqQlV+Li7LjkPWX7LQylkXtaWDqut+5zResjOTdCuvP80XkpZvF+Dqi4w5UKT5
+        wCbeF4MlSXpfG4fs+vRP83cG4kVJEtH6SY5cTh6eCLPqpQT8/JxfAmk0JORlWhpf
+        /1t4XiWTzKyDSxip3G+RLhsz80L9WmiXTeZtaEfASLV1YarjFTAk4ZKbJ4SNyIBt
+        eu8QY8hOtPxcTCrBJJct4QPeFZL2zRiqfDSLl9iJCSNjxPYYhKt5qMHXqXUHjbML
+        gXYdRApDZzyy5eOd9pfyD3p0ZGokXVrVOrKtJc7QybGABI6mr1rWFGd28oJXj4w5
+        e/ju9LC9Wfd4Sy1Hb5m1j/NExvn9Di5A9nlFebPnN9K2qPcIkzP51uGB3xtMRxua
+        383gXsnXmTIYvrgfiK7BgxBjjlXDMUZKcPIw1ZVXnl+BdKgDlpTMjpGqcxwV+BQf
+        8ERK4NC46+EVapYiBbOoc0Bwovrp2bIZ6ljpJn+E3W74WW44I6WFbK2cFQ6xnzAl
+        NTK64KzsVz+7FYBS7RrAN3mkg3GU6duPFfwoYPNAtm2S6IyGc3Z7q3IljLCljZuw
+        6XL5JklWcLsb8FSYy+adff0Fu7fo7i1DGj9PeJZWzjQlWYd73mNcYus6SCH2kpSk
+        fuXEyWJoEoFZnbSXIfJyGtUCAwEAAQ==
+        -----END PUBLIC KEY-----
     volumes:
       - ./server:/app
     ports:
