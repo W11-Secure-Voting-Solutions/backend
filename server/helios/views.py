@@ -78,9 +78,10 @@ from .workflows import homomorphic
 import helios_auth.url_names as helios_auth_urls
 
 from apolloassistant.models import CastCode
-from apolloassistant.registrar import generate_codes_for_user_in_election
-from apolloassistant.registrar import send_email_with_codes
-from apolloassistant.verification import sign
+from apolloassistant.registrar import (
+    generate_codes_for_user_in_election, 
+    request_send_email_with_codes
+)
 
 # Parameters for everything
 ELGAMAL_PARAMS = elgamal.Cryptosystem()
@@ -1998,7 +1999,7 @@ def one_election(request, election):
     if not validate_email(user.user_id):
         raise Http404("Assummed Google+. User does not have valid email.")
 
-    send_email_with_codes(user.user_id, election)
+    request_send_email_with_codes(user.user_id, election)
 
     return election.toJSONDict(complete=True)
 

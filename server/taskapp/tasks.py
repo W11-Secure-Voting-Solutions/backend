@@ -4,12 +4,13 @@ Celery queued tasks for Helios
 2010-08-01
 ben@adida.net
 """
+from django.core import mail as django_mail
 
 import copy
 from celery import shared_task
 from celery.utils.log import get_logger
 
-from helios import signals
+from helios import signals, utils
 from helios.models import CastVote, Election, Voter, VoterFile
 from helios.view_utils import render_template_raw
 
@@ -163,3 +164,18 @@ Helios
 def election_notify_admin(election_id, subject, body):
     election = Election.objects.get(id=election_id)
     election.admin.send_message(subject, body)
+
+
+@shared_task()
+def send_email_with_codes(email, cast_codes, lockin_code, election_uuid):
+    sender = "apollo.votingsystem@gmail.com"
+    recipient = [email]
+    subject = "Apollo lock-in and cast codes"
+    body = (
+        "Hello there! I am Trusted Registrar and here are your "
+        "cast codes: %s and "
+        "lockin code: %s "
+        "for election with UUID: %s."
+        % (", ".join(cast_codes), lockin_code, election_uuid)
+    )
+    utils.send_email(sender, recipient, subject, body)
