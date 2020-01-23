@@ -12,4 +12,4 @@
 
 ### Run tests
 
-`docker-compose run --rm app python manage.py test --settings config.settings.test`
+`docker-compose run --rm app python manage.py test --settings config.environments.test`

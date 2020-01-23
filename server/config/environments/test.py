@@ -1,16 +1,7 @@
-from .base import *  # noqa
+from .base import *  # pylint: disable=W0614
 
 DEBUG = False
-
 TEMPLATES[0]["OPTIONS"]["debug"] = False
-#
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": ":memory:",
-#         "TEST_NAME": ":memory:"
-#     }
-# }
 
 CACHES = {
     "default": {
@@ -23,3 +14,5 @@ CACHES = {
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
 TEST_RUNNER = "config.runner.PytestTestRunner"
+
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
