@@ -402,8 +402,20 @@
 
         BOOTH.load_and_setup_election = function (election_url) {
           // the hash will be computed within the setup function call now
-          $.get(election_url, function (raw_json) {
-            // let's also get the metadata
+          fetch(election_url).then(async response => {
+
+            if (response.status !== 200) {
+              if ($('#title_input .error').length > 0) return;
+
+              $('#title_input').append(`
+              <span class="error" style="font-weight: 700; font-size: 1em; color: #ff0000;">
+                Exit voting, login and try again. </br>
+                Non-logged users cannot vote in Apollo. </br>
+                (We need to know email to send you cast codes & lock-in code) </br>
+              </span>`);
+              return;
+            }
+            const raw_json = await response.text();
             $.getJSON(election_url + "meta", {}, function (election_metadata) {
               BOOTH.election_metadata = election_metadata;
               BOOTH.setup_election(raw_json, election_metadata);
@@ -411,7 +423,6 @@
               BOOTH.election_url = election_url;
             });
           });
-
 
           if (USE_SJCL) {
             // get more randomness from server
