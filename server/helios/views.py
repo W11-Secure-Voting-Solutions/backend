@@ -38,7 +38,7 @@ from helios.models import (
     VoterFile,
     Trustee,
     AuditedBallot,
-)
+    FakeBooth)
 from helios_auth import views as auth_views
 from helios_auth.auth_systems import AUTH_SYSTEMS, can_list_categories
 from helios_auth.models import AuthenticationExpired
@@ -79,6 +79,7 @@ import helios_auth.url_names as helios_auth_urls
 from apolloassistant.models import CastCode
 from apolloassistant.registrar import generate_codes_for_user_in_election
 from apolloassistant.registrar import send_email_with_codes
+from apolloassistant.verification import sign
 
 # Parameters for everything
 ELGAMAL_PARAMS = elgamal.Cryptosystem()
@@ -730,8 +731,10 @@ def password_voter_login(request, election):
 
     return HttpResponseRedirect(settings.SECURE_URL_HOST + return_url)
 
+
 def _posted_valid_cast_code(request, election):
     cast_code = request.POST.get('cast_code')
+    session_id = request.POST['session_id']
 
     if not cast_code:
         return False
@@ -746,6 +749,19 @@ def _posted_valid_cast_code(request, election):
 
     cast_code.used = True
     cast_code.save()
+
+    voter = Voter.objects.get(user=user, election=election)
+    booth = FakeBooth.objects.get(id=session_id)
+
+    signature = sign(cast_code.value + voter.vote)
+    booth.body.append({
+        'castedVoteWithCastCode': {
+            'encryptedVote': voter.vote,
+            'castCode': cast_code.value,
+            'signature': signature
+        }
+    })
+    booth.save()
 
     return True
 
