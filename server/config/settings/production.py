@@ -103,14 +103,14 @@ ROOT_URLCONF = "urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [str(APPS_DIR.path("templates")), str(APPS_DIR),],
+        "DIRS": [str(APPS_DIR.path("templates")), str(APPS_DIR), ],
         "OPTIONS": {
             "debug": DEBUG,
             "loaders": [
                 "django.template.loaders.filesystem.Loader",
                 "django.template.loaders.app_directories.Loader",
             ],
-            "context_processors": ["django.template.context_processors.request",],
+            "context_processors": ["django.template.context_processors.request", ],
         },
     },
 ]
@@ -128,7 +128,7 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.staticfiles",
-    "rest_framework"
+    "rest_framework",
     "debug_toolbar",
     "corsheaders",
     "allauth",
@@ -139,8 +139,16 @@ INSTALLED_APPS = (
     "helios_auth.apps.HeliosAuthConfig",
     "helios.apps.HeliosConfig",
     "server_ui.apps.ServerUiConfig",
-    "apolloassistant"
+    "apolloassistant",
 )
+
+# REST_FRAMEWORK = {
+#     # Use Django's standard `django.contrib.auth` permissions,
+#     # or allow read-only access for unauthenticated users.
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+#     ]
+# }
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
@@ -150,9 +158,10 @@ SOCIALACCOUNT_PROVIDERS = {
             "key": "",
         }
     },
-    "github": {"SCOPE": ["user",]},
+    "github": {"SCOPE": ["user", ]},
 }
 
+INTERNAL_IPS = []
 
 ##
 ## HELIOS
@@ -226,13 +235,14 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS", default="0") == "1"
 if env("EMAIL_USE_AWS", default="0") == "1":
     EMAIL_BACKEND = "django_ses.SESBackend"
 
-logging.basicConfig(level=logging.ERROR, format="%(asctime)s %(levelname)s %(message)s")
+logging.basicConfig(level=logging.DEBUG,
+                    format="%(asctime)s %(levelname)s %(message)s")
 
-GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID")
-GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET")
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default="")
+GOOGLE_CLIENT_SECRET = env("GOOGLE_CLIENT_SECRET", default="")
 
 
-CELERY_BROKER_URL = env("CELERY_BROKER_URL")
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="django://")
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
@@ -245,6 +255,6 @@ CELERY_TASKS_ALWAYS_EAGER = True
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_PRELOAD = True
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 
 LOGIN_REDIRECT_URL = '/'
