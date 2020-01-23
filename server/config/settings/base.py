@@ -227,12 +227,13 @@ AUTH_ENABLED_AUTH_SYSTEMS = env("AUTH_ENABLED_AUTH_SYSTEMS", default="google").s
 )
 AUTH_DEFAULT_AUTH_SYSTEM = env("AUTH_DEFAULT_AUTH_SYSTEM", default=None)
 
-# email server
-EMAIL_HOST = env("EMAIL_HOST", default="localhost")
-EMAIL_PORT = int(env("EMAIL_PORT", default="2525"))
+# # email server
+EMAIL_BACKEND = env("EMAIL_BACKEND", default="")
+EMAIL_HOST = env("EMAIL_HOST", default="")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS", default="")
+EMAIL_PORT = env("EMAIL_PORT", default="")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
-EMAIL_USE_TLS = env("EMAIL_USE_TLS", default="0") == "1"
 
 # to use AWS Simple Email Service
 # in which case environment should contain

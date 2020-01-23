@@ -11,4 +11,11 @@ GOOGLE_CLIENT_SECRET=kzIYSXHGSKb7ynUbky9E7UWT
 SECURE_URL_HOST=http://127-0-0-1.nip.io:8000
 URL_HOST=http://127-0-0-1.nip.io:8000
 
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_USE_TLS=true
+EMAIL_PORT=587
+EMAIL_HOST_USER=apollo.votingsystem@gmail.com
+EMAIL_HOST_PASSWORD=Ap0llo123
+
 CELERY_BROKER_URL=redis://redis:6379
