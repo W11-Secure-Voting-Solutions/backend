@@ -7,6 +7,7 @@ from rest_framework.routers import DefaultRouter
 
 
 urlpatterns = [
+    url(r"^lockin", views.lockin_booth),
     url(r"^autologin$", views.admin_autologin),
     url(r"^testcookie$", helios.views.test_cookie, name=names.COOKIE_TEST),
     url(r"^testcookie_2$", helios.views.test_cookie_2, name=names.COOKIE_TEST_2),

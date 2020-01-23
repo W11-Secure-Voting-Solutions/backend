@@ -78,11 +78,12 @@ from .workflows import homomorphic
 
 import helios_auth.url_names as helios_auth_urls
 
-from apolloassistant.models import CastCode
+from apolloassistant.models import CastCode, LockInCode
 from apolloassistant.registrar import (
     generate_codes_for_user_in_election, 
     request_send_email_with_codes
 )
+from apolloassistant.verification import sign
 
 # Parameters for everything
 ELGAMAL_PARAMS = elgamal.Cryptosystem()
@@ -2006,6 +2007,30 @@ def one_election(request, election):
 
     return election.toJSONDict(complete=True)
 
+def handle_lockin(request):
+    if request.method == 'POST':
+        session_id = request.POST.get('session_id')
+        lockin_code = request.POST.get('lockin_code')
+
+        if not session_id or not lockin_code:
+            return 'Failed to lockin' # Dummy message left intentionally.
+
+        lockin_code = LockInCode.objects.filter(value=lockin_code).first()
+        fake_booth_exists = FakeBooth.objects.filter(
+            id=session_id, 
+            election=lockin_code.election,
+        ).exists()
+
+        if not fake_booth_exists or not lockin_code:
+            return 'Failed to lockin' # Dummy message left intentionally.
+
+        lockin_code.used = True
+        lockin_code.save()
+    return 'Success! Your vote was sucessfully locked'
+
+def lockin_booth(request):
+    feedback_message = handle_lockin(request)
+    return render_template(request, "lock_in", {'feedback_message': feedback_message})
 
 def test_cookie(request):
     continue_url = request.GET["continue_url"]

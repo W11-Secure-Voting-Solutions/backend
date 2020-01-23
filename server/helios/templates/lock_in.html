@@ -1,0 +1,25 @@
+{% extends TEMPLATE_BASE %}
+{% block title %}Lock-in Booth{% endblock %}
+
+{% block content %}
+<div class="lock_in">
+  <div>
+    <h1>Lock-in</h1>
+    <p>Use this form to perform lock on election you participate in. <b>Do it after casting your ballot.</b></p>
+    <p>Verify that your ballot is encrypted properly. To verify check Bulletin Board for your encrypted ballot signed by
+      registrar</p>
+    <p> Click <a href="/assistant/pubkey/" target="_blank">here</a> to get registrar public key. Click <a
+        href="/helios/fake-booth/" target="_blank">here</a> to get BB.</a></p>
+  </div>
+  <form class="form" method="POST" action="/helios/lockin/">
+    Lock-in Code <input name="lockin_code" type="text" required>
+    Session ID <input name="session_id" type="text" required>
+    <input type="submit" value="Lock your vote">
+    {% if feedback_message %}
+    <span style="color: red; font-weight: 400;">{{ feedback_message }}</span>
+    {% endif %}
+    <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
+  </form>
+</div>
+
+{% endblock %}
