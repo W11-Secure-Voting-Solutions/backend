@@ -8,7 +8,7 @@ steps:
   id: tests
   env:
     - 'IMG=gcr.io/$PROJECT_ID/${_APP_NAME}:$BRANCH_NAME-$SHORT_SHA'
-  args: ['run', '-f', 'docker-compose.ci.yml','--rm', 'ci_test']
+  args: ['-f', 'docker-compose.ci.yml', 'run', '--rm', 'ci_test']
 
 images: ['gcr.io/$PROJECT_ID/${_APP_NAME}:$BRANCH_NAME-$SHORT_SHA']
 
