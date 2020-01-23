@@ -55,7 +55,7 @@ ASSISTANT.audit_ballot = function () {
   const randomnesses = auditTrailObject.answers[0].randomness;
 
   const kRand = localStorage['keyRandom'];
-  var encryptedRandomnesses = ASSISTANT.encrypt(randomnesses.toString(), kRand);
+  var encryptedRandomnesses = ASSISTANT.encrypt(JSON.stringify(randomnesses), kRand);
   const body = {
     "randomness": encryptedRandomnesses
   };
@@ -70,8 +70,8 @@ ASSISTANT.encrypt = function(message, key) {
 }
 
 ASSISTANT.sendEncryptedChoices = function(encryptedBallot) {
-  const encryptedChoicesObject = JSON.parse(encryptedBallot);
-  const choices = JSON.stringify(encryptedChoicesObject.answers[0].choices);
+  const encryptedBallotObject = JSON.parse(encryptedBallot);
+  const choices = JSON.stringify(encryptedBallotObject.answers[0].choices);
   const data = {
     choices
   }
