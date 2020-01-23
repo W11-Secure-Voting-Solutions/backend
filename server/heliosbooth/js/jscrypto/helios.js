@@ -464,17 +464,8 @@ HELIOS.EncryptedVote = Class.extend({
       var answers = _(this.encrypted_answers).map(function(ea,i) {
       return ea.toJSONObject(include_plaintext);
     });
-    
-    var randomnesses = answers.forEach(function (plaintextAnswer, i) {
-      r = plaintextAnswer.randomness
-      console.log("Getting randomness from "+ i +"th answer = "+ r);
-    });
 
-    // randomness
-    kRand = localStorage['keyRandom'];
-    console.log("KRAND " + kRand);
     // answers
-    
     return {
       answers : answers,
       election_hash : this.election_hash,

@@ -32,7 +32,7 @@ ASSISTANT.renderQrCode = function () {
 
   const qrCodeData = JSON.stringify({
     'sessionId': localStorage['sessionId'],
-    'sessionTitle': localStorage['sessionTitle'],
+    'kRand': localStorage['keyRandom'],
   });
 
   $('#qrcode').qrcode({ width: 256, height: 256, text: qrCodeData });
@@ -40,18 +40,48 @@ ASSISTANT.renderQrCode = function () {
   $('#session-id').text('sessionId: ' + localStorage['sessionId']);
 }
 
+ASSISTANT.sendPublicKey = function(publicKey) {
+  const electionObject = JSON.parse(publicKey);
+  const publicKeyString = JSON.stringify(electionObject.public_key);
+  const data = {
+    'publicKey': publicKeyString
+  }
+  ASSISTANT.postOnBB(data);
+}
+
 ASSISTANT.audit_ballot = function () {
-  const encryptedRandomness = localStorage["encryptedRandomness"];
+  BOOTH.audit_trail = BOOTH.encrypted_ballot_with_plaintexts_serialized || $.toJSON(BOOTH.encrypted_ballot.get_audit_trail());
+  const auditTrailObject = JSON.parse(BOOTH.audit_trail);
+  const randomnesses = auditTrailObject.answers[0].randomness;
+
+  const kRand = localStorage['keyRandom'];
+  var encryptedRandomnesses = ASSISTANT.encrypt(randomnesses.toString(), kRand);
   const body = {
-    "body": encryptedRandomness
+    "randomness": encryptedRandomnesses
   };
   ASSISTANT.postOnBB(body);
-  BOOTH.audit_ballot();
+  BOOTH.show($('#audit_div')).processTemplate({ 'audit_trail': BOOTH.audit_trail, 'election_url': BOOTH.election_url });
 };
 
-ASSISTANT.postOnBB = function (data) {
+ASSISTANT.encrypt = function(message, key) {
+  var message = CryptoJS.AES.encrypt(message, key).toString();
+  return message.toString();
+
+}
+
+ASSISTANT.sendEncryptedChoices = function(encryptedBallot) {
+  const encryptedChoicesObject = JSON.parse(encryptedBallot);
+  const choices = JSON.stringify(encryptedChoicesObject.answers[0].choices);
+  const data = {
+    choices
+  }
+  ASSISTANT.postOnBB(data);
+}
+
+ASSISTANT.postOnBB = function(data) {
   const sessionId = localStorage["sessionId"];
   const url = `/helios/fake-booth/${sessionId}/`;
+  
   $.ajax({
     url: url,
     type: 'PUT',

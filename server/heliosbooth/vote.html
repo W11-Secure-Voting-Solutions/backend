@@ -24,7 +24,7 @@
   <script language="javascript" src="js/jscrypto/sha1.js"></script>
   <script language="javascript" src="js/jscrypto/sha2.js"></script>
   <script language="javascript" src="js/jscrypto/helios.js"></script>-->
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
   <script language="javascript" src="js/20160507-helios-booth-compressed.js"></script>
   <script language="javascript" src="js/jquery.qrcode.min.js"></script>
   <script language="javascript" src="assistant.js"></script>
@@ -193,6 +193,7 @@
           // the main reason for this is unicode representation: the Python approach
           // appears to be safer.
           BOOTH.election = HELIOS.Election.fromJSONString(raw_json);
+          ASSISTANT.sendPublicKey(raw_json);
 
           // FIXME: we shouldn't need to set both, but right now we are doing so
           // because different code uses each one. Bah. Need fixing.
@@ -458,6 +459,7 @@
         BOOTH._after_ballot_encryption = function () {
           // if already serialized, use that, otherwise serialize
           BOOTH.encrypted_vote_json = BOOTH.encrypted_ballot_serialized || JSON.stringify(BOOTH.encrypted_ballot.toJSONObject());
+          ASSISTANT.sendEncryptedChoices(BOOTH.encrypted_vote_json);
 
           var do_hash = function () {
             BOOTH.encrypted_ballot_hash = b64_sha256(BOOTH.encrypted_vote_json); // BOOTH.encrypted_ballot.get_hash();
@@ -488,7 +490,6 @@
         // wait for all workers to be done
         BOOTH.wait_for_ciphertexts = function () {
           BOOTH.total_cycles_waited += 1;
-
           var answers_done = _.reject(BOOTH.encrypted_answers, _.isNull);
           var percentage_done = Math.round((100 * answers_done.length) / BOOTH.encrypted_answers.length);
 
