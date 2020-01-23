@@ -5,6 +5,7 @@
 <script language="javascript">
   $(document).ready(function () {
     $('#waiting_div').hide();
+    $('input[name="session_id"]').val(localStorage.sessionId);
   });
 
   function show_waiting() {
