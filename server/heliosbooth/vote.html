@@ -6,26 +6,24 @@
   <title>Helios Voting Booth</title>
   <link rel="stylesheet" type="text/css" href="css/booth.css" />
   <link rel="stylesheet" type="text/css" href="css/forms.css" />
-
-  <!--
+  <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
+  <script language="javascript" src="js/jquery-1.2.6.min.js"></script>
+  <script language="javascript" src="js/jquery.query-2.1.5.js"></script>
+  <script language="javascript" src="js/jquery-jtemplates.js"></script>
+  <script language="javascript" src="js/jquery.json.min.js"></script>
   <script language="javascript" src="js/jscrypto/class.js"></script>
   <script language="javascript" src="js/jscrypto/bigint.dummy.js"></script>
   <script language="javascript" src="js/jscrypto/jsbn.js"></script>
   <script language="javascript" src="js/jscrypto/jsbn2.js"></script>
   <script language="javascript" src="js/jscrypto/sjcl.js"></script>
   <script language="javascript" src="js/underscore-min.js"></script>
-  <script language="javascript" src="js/jquery-1.2.2.min.js"></script>
-  <script language="javascript" src="js/jquery.query-2.1.5.js"></script>
-  <script language="javascript" src="js/jquery-jtemplates.js"></script>
-  <script language="javascript" src="js/jquery.json.min.js"></script>
   <script language="javascript" src="js/jscrypto/bigint.js"></script>
   <script language="javascript" src="js/jscrypto/random.js"></script>
   <script language="javascript" src="js/jscrypto/elgamal.js"></script>
   <script language="javascript" src="js/jscrypto/sha1.js"></script>
   <script language="javascript" src="js/jscrypto/sha2.js"></script>
-  <script language="javascript" src="js/jscrypto/helios.js"></script>-->
+  <script language="javascript" src="js/jscrypto/helios.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-  <script language="javascript" src="js/20160507-helios-booth-compressed.js"></script>
   <script language="javascript" src="js/jquery.qrcode.min.js"></script>
   <script language="javascript" src="assistant.js"></script>
 </head>
@@ -50,9 +48,10 @@
 
           // we're asynchronous if we have SJCL and Worker
           BOOTH.synchronous = !(USE_SJCL && window.Worker);
+          BOOTH.synchronous = true;
 
           // we do in the browser only if it's asynchronous
-          BigInt.in_browser = !BOOTH.synchronous;
+          BigInt.in_browser = true;
 
           // set up dummy bigint for fast parsing and serialization
           if (!BigInt.in_browser)
@@ -521,16 +520,16 @@
         };
 
         BOOTH.seal_ballot_raw = function () {
-          if (BOOTH.synchronous) {
-            BOOTH.progress = new UTILS.PROGRESS();
-            var progress_interval = setInterval("BOOTH.check_encryption_status()", 500);
-            BOOTH.encrypted_ballot = new HELIOS.EncryptedVote(BOOTH.election, BOOTH.ballot.answers, BOOTH.progress);
-            clearInterval(progress_interval);
-            BOOTH._after_ballot_encryption();
-          } else {
-            BOOTH.total_cycles_waited = 0;
-            BOOTH.wait_for_ciphertexts();
-          }
+          // if (BOOTH.synchronous) {
+          //   BOOTH.progress = new UTILS.PROGRESS();
+          //   var progress_interval = setInterval("BOOTH.check_encryption_status()", 500);
+          BOOTH.encrypted_ballot = new HELIOS.EncryptedVote(BOOTH.election, BOOTH.ballot.answers, BOOTH.progress);
+          //   clearInterval(progress_interval);
+          //   BOOTH._after_ballot_encryption();
+          // } else {
+          //   BOOTH.total_cycles_waited = 0;
+          //   BOOTH.wait_for_ciphertexts();
+          // }
         };
 
         BOOTH.request_ballot_encryption = function () {
@@ -554,16 +553,16 @@
         };
 
         BOOTH.seal_ballot = function () {
-          BOOTH.show_progress('2');
-
+          // BOOTH.show_progress('2');
+          BOOTH.seal_ballot_raw();
           // if we don't have the ability to do crypto in the browser,
           // we use the server
-          if (!BigInt.in_browser) {
-            BOOTH.show_encryption_message_before(BOOTH.request_ballot_encryption, true);
-          } else {
-            BOOTH.show_encryption_message_before(BOOTH.seal_ballot_raw, true);
-            $('#percent_done_container').show();
-          }
+          // if (!BigInt.in_browser) {
+          //   BOOTH.show_encryption_message_before(BOOTH.request_ballot_encryption, true);
+          // } else {
+          //   BOOTH.show_encryption_message_before(BOOTH.seal_ballot_raw, true);
+          //   $('#percent_done_container').show();
+          // }
         };
 
         BOOTH.audit_ballot = function () {
