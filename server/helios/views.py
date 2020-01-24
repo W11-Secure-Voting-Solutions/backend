@@ -2028,24 +2028,25 @@ def one_election(request, election):
     return election.toJSONDict(complete=True)
 
 def handle_lockin(request):
-    if request.method == 'POST':
-        session_id = request.POST.get('session_id')
-        lockin_code = request.POST.get('lockin_code')
+    if request.method != 'POST':
+        return ''
+    session_id = request.POST.get('session_id')
+    lockin_code = request.POST.get('lockin_code')
 
-        if not session_id or not lockin_code:
-            return 'Failed to lockin' # Dummy message left intentionally.
+    if not session_id or not lockin_code:
+        return 'Failed to lockin' # Dummy message left intentionally.
 
-        lockin_code = LockInCode.objects.filter(value=lockin_code).first()
-        fake_booth_exists = FakeBooth.objects.filter(
-            id=session_id, 
-            election=lockin_code.election,
-        ).exists()
+    lockin_code = LockInCode.objects.filter(value=lockin_code).first()
+    fake_booth_exists = FakeBooth.objects.filter(
+        id=session_id, 
+        election=lockin_code.election,
+    ).exists()
 
-        if not fake_booth_exists or not lockin_code:
-            return 'Failed to lockin' # Dummy message left intentionally.
+    if not fake_booth_exists or not lockin_code:
+        return 'Failed to lockin' # Dummy message left intentionally.
 
-        lockin_code.used = True
-        lockin_code.save()
+    lockin_code.used = True
+    lockin_code.save()
     return 'Success! Your vote was sucessfully locked'
 
 def lockin_booth(request):
