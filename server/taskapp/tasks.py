@@ -179,3 +179,10 @@ def send_email_with_codes(email, cast_codes, lockin_code, election_uuid):
         % (", ".join(cast_codes), lockin_code, election_uuid)
     )
     utils.send_email(sender, recipient, subject, body)
+
+@shared_task()
+def send_email(recipients, subject, body):
+    sender = "apollo.votingsystem@gmail.com"
+
+    utils.send_email(sender, recipients, subject, body)
+

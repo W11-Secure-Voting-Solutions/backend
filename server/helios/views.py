@@ -739,6 +739,7 @@ def password_voter_login(request, election):
 def _posted_valid_cast_code(request, election, encrypted_vote):
     cast_code = request.POST.get("cast_code")
     session_id = request.POST["session_id"]
+    session_title = request.POST["session_title"]
 
     if not cast_code:
         return False
@@ -756,6 +757,25 @@ def _posted_valid_cast_code(request, election, encrypted_vote):
     cast_code.save()
 
     booth = FakeBooth.objects.get(id=session_id)
+
+    mail_body = """
+        Your cast code has been accepted.
+        Session-id: {0}
+        Session title: {1}
+        Cast code: {2}
+        Casted at: {3}
+    """.format(
+        session_id,
+        session_title,
+        cast_code.value,
+        datetime.datetime.utcnow()
+    )
+
+    tasks.send_email.delay(
+        ["%s <%s>" % (user.name, user.info["email"])],
+        "Apollo cast code accepted",
+        mail_body
+    )
 
     signature = base64.b64encode(sign(cast_code.value + encrypted_vote.decode())).decode()
     booth.election = election
