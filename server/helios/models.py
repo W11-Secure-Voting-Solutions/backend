@@ -432,7 +432,7 @@ class Election(HeliosModel):
     tally the election, assuming votes already verified
     """
         tally = self.init_tally()
-        booth = FakeBooth.objects.filter(election=self)
+        booth = FakeBooth.objects.filter(election=self).first()
         for entry in booth.body:
             if 'castedVoteWithCastCode' in entry:
                 tally.add_vote(entry['castedVoteWithCastCode']['encryptedVote'], verify_p=False)
